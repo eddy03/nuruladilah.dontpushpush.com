@@ -1,6 +1,11 @@
+<ol class="breadcrumb">
+    <li><a href="#/"><i class="fa fa-home fa-fw"></i> Utama</a></li>
+    <li><a href="#/training">Senarai Latihan</a></li>
+    <li class="active">Maklumat Penilaian Latihan</li>
+</ol>
 <h2 class="sub-header">
     Maklumat Penilaian Latihan
-    <a ng-href="#/training/{{ penilaianid }}/daftarjawapan" class="btn btn-primary pull-right" ng-hide="penilaianLatihan.peserta.length == penilaianLatihan.bilanganPeserta">
+    <a ng-href="#/training/{{ penilaianid }}/daftarjawapan" class="btn btn-success pull-right" ng-hide="penilaianLatihan.peserta.length == penilaianLatihan.bilanganPeserta">
         <i class="fa fa-user-plus fa-fw"></i> Tambah Peserta
     </a>
 </h2>
@@ -11,35 +16,47 @@
             <i class="fa fa-file-text-o fa-fw"></i> Maklumat Penilaian Latihan
         </uib-tab-heading>
 
-        <form class="form-horizontal">
+        <form class="form-horizontal" ng-submit="updateLatihan()">
             <div class="form-group">
                 <label class="col-sm-2 control-label">Tajuk Kursus</label>
                 <div class="col-sm-10">
-                    <p class="form-control-static">{{ penilaianLatihan.tajuk }}</p>
+                    <input type="text" class="form-control" ng-model="penilaianLatihan.tajuk" placeholder="Tajuk kursus" required />
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 control-label">Tarikh Kursus</label>
                 <div class="col-sm-10">
-                    <p class="form-control-static">{{ penilaianLatihan.tarikh | date:'dd-MM-yyyy' }}</p>
+                    <div class="input-group">
+                        <input type="text" class="form-control" ng-model="penilaianLatihan.tarikh" placeholder="Tarikh kursus" uib-datepicker-popup datepicker-append-to-body="true" is-open="status.opened" datepicker-options="dateOptions" readonly required />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="opendatepicker($event)">
+                                <i class="fa fa-calendar fa-fw"></i>
+                            </button>
+                        </span>
+                    </div>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 control-label">Tempat Kursus</label>
                 <div class="col-sm-10">
-                    <p class="form-control-static">{{ penilaianLatihan.tempat }}</p>
+                    <input type="text" class="form-control" ng-model="penilaianLatihan.tempat" placeholder="Tempat kursus" required />
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 control-label">Penganjur</label>
                 <div class="col-sm-10">
-                    <p class="form-control-static">{{ penilaianLatihan.penganjur }}</p>
+                    <input type="text" class="form-control" ng-model="penilaianLatihan.penganjur" placeholder="Penganjur" required />
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 control-label">Bilangan Peserta</label>
                 <div class="col-sm-10">
-                    <p class="form-control-static">{{ penilaianLatihan.bilanganPeserta }}</p>
+                    <input type="text" class="form-control" ng-model="penilaianLatihan.bilanganPeserta" placeholder="Bilangan Peserta" required />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 text-right">
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-save fa-fw"></i> Simpan</button>
                 </div>
             </div>
         </form>
@@ -114,5 +131,26 @@
         <uib-tab-heading>
             <i class="fa fa-bar-chart-o fa-fw"></i> Statistik Keberkesanan Latihan (Ketua Bahagian)
         </uib-tab-heading>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <p class="lead">
+                    Jumlah markah keseluruhan Sebelum : {{ totalMarkahSebelum }} daripada {{ jumlahKeseluruhanMarkah }}.<br />
+                    Jumlah markah keseluruhan Selepas : {{ totalMarkahSelepas }} daripada {{ jumlahKeseluruhanMarkah }}.<br />
+                </p>
+                <hr />
+                <p class="lead">
+                    <span class="text-danger">
+                        JUMLAH PERATUSAN SEBELUM : {{ totalMarkahSebelum / jumlahKeseluruhanMarkah * 100 | number:2 }} %
+                    </span><br />
+                    <span class="text-danger">
+                        JUMLAH PERATUSAN SELEPAS : {{ totalMarkahSelepas / jumlahKeseluruhanMarkah * 100 | number:2 }} %
+                    </span>
+                </p>
+            </div>
+            <div class="col-sm-6">
+                <div id="chart2" style="width: 900px; height: 400px"></div>
+            </div>
+        </div>
     </uib-tab>
 </uib-tabset>

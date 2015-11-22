@@ -32,8 +32,20 @@
             </div>
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#/">Dashboard</a></li>
+                    <li><a href="#/">Dashboard</a></li>
                     <li><a href="#/training">Training</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tindakan <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href=""><i class="fa fa-user fa-fw"></i> Profile</a></li>
+                            <li role="separator" class="divider"></li>
+                            {{--<li class="dropdown-header">Nav header</li>--}}
+                            <li><a href="/logout"><i class="fa fa-sign-out fa-fw"></i> Log Keluar</a></li>
+                        </ul>
+                    </li>
+
                 </ul>
             </div>
         </div>
