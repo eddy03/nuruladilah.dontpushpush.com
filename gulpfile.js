@@ -34,11 +34,12 @@ elixir(function(mix) {
             'lib/angular-route.min.js',
             'lib/angular-resource.min.js',
             'lib/ui-bootstrap.min.js',
-            'lib/ui-bootstrap-tpls.min.js',
+            'lib/ui-bootstrap-tpls.js',
             'lib/bootstrap.min.js',
             'lib/lodash.min.js',
             'lib/highcharts.js',
             'lib/highcharts-3d.js',
+            'lib/exporting.js',
             'App.js',
             'models',
             'controllers'
