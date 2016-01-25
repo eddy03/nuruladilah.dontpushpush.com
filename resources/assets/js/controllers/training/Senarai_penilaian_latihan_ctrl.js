@@ -3,8 +3,9 @@ angular.module('dylurp')
         '$scope',
         '$uibModal',
         '$location',
+        'blockUI',
         'PenilaianLatihanModel',
-        function($scope, $uibModal, $location, PenilaianLatihanModel) {
+        function($scope, $uibModal, $location, blockUI, PenilaianLatihanModel) {
 
             $scope.qs = {};
 
@@ -18,7 +19,7 @@ angular.module('dylurp')
                     console.error(error);
                 });
 
-            }
+            };
 
             $scope.tambahPenilaian = function() {
 

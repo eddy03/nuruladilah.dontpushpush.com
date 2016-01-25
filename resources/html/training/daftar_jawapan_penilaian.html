@@ -1,253 +1,279 @@
-<ol class="breadcrumb">
-    <li><a href="#/"><i class="fa fa-home fa-fw"></i> Utama</a></li>
-    <li><a href="#/training">Senarai Latihan</a></li>
-    <li><a ng-href="#/training/{{ penilaianid }}">Maklumat Penilaian Latihan</a></li>
-    <li class="active">Tambah Jawapan</li>
-</ol>
-<h2 class="sub-header">
-    Tambah Maklumat Jawapan Peserta
-</h2>
-<form name="jawapanpeserta" class="form-horizontal">
-    <div>
-        <uib-tabset>
-            <uib-tab>
-                <uib-tab-heading>
-                    <i class="fa fa-file-text-o fa-fw"></i> Maklumat Penilaian Latihan
-                </uib-tab-heading>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Tambah Maklumat Jawapan Peserta
+        <small>Nurul adilah Training Management</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#/"><i class="fa fa-dashboard"></i> Utama</a></li>
+        <li><a href="#/training">Senarai Latihan</a></li>
+        <li><a ng-href="#/training/{{ penilaianid }}">Maklumat Penilaian Latihan</a></li>
+        <li class="active">Tambah Jawapan</li>
+    </ol>
+</section>
 
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">Tajuk</label>
-                    <div class="col-sm-10">
-                        <p class="form-control-static">{{ form.tajuk }}</p>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">Nama Peserta</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" name="nama" ng-model="form.nama" required placeholder="Nama Peserta" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">Tempat</label>
-                    <div class="col-sm-10">
-                        <p class="form-control-static">{{ form.tempat }}</p>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">Bil. Peserta</label>
-                    <div class="col-sm-10">
-                        <p class="form-control-static">{{ form.bilanganPeserta }}</p>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">Tarikh</label>
-                    <div class="col-sm-10">
-                        <p class="form-control-static">{{ form.tarikh }}</p>
-                    </div>
-                </div>
-                <div class="form-group text-right">
-                    <div class="col-sm-12">
-                        <a ng-href="#/training/{{ penilaianid }}" class="btn btn-default">
-                            <i class="fa fa-times fa-fw"></i> Batal
-                        </a>
-                        <button type="submit" class="btn btn-primary" ng-disabled="jawapanpeserta.$invalid" ng-click="simpan()">
-                            <i class="fa fa-save fa-fw"></i> Simpan
-                        </button>
-                    </div>
-                </div>
+<!-- Main content -->
+<section class="content">
 
-            </uib-tab>
-            <uib-tab>
-                <uib-tab-heading>
-                    <i class="fa fa-user fa-fw"></i> Penilaian Latihan Peserta
-                </uib-tab-heading>
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Maklumat Penilaian Latihan</h3>
 
-                <div class="row">
-                    <div class="col-sm-8">
-                        <div class="senaraiPenilaian">
-                            <div class="row" ng-repeat="penilaian in form.senaraiPenilaian">
+            <div class="box-tools">
+                <div class="text-right" style="width: 150px;">
+                    <a ng-href="#/training/{{ penilaianid }}/daftarjawapan" class="btn btn-success btn-flat btn-sm" ng-hide="penilaianLatihan.peserta.length == penilaianLatihan.bilanganPeserta">
+                        <i class="fa fa-user-plus fa-fw"></i> Tambah Peserta
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <form name="jawapanpeserta" class="form-horizontal">
+                <div>
+                    <uib-tabset>
+                        <uib-tab>
+                            <uib-tab-heading>
+                                <i class="fa fa-file-text-o fa-fw"></i> Maklumat Penilaian Latihan
+                            </uib-tab-heading>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Tajuk</label>
+                                <div class="col-sm-10">
+                                    <p class="form-control-static">{{ form.tajuk }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Nama Peserta</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="nama" ng-model="form.nama" required placeholder="Nama Peserta" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Tempat</label>
+                                <div class="col-sm-10">
+                                    <p class="form-control-static">{{ form.tempat }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Bil. Peserta</label>
+                                <div class="col-sm-10">
+                                    <p class="form-control-static">{{ form.bilanganPeserta }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Tarikh</label>
+                                <div class="col-sm-10">
+                                    <p class="form-control-static">{{ form.tarikh }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group text-right">
                                 <div class="col-sm-12">
-                                    <p class="bahagian">{{ penilaian.bahagian }}</p>
-                                    <div class="row" ng-repeat="aspek in penilaian.skop">
-                                        <div class="col-sm-9">
-                                            <p class="aspek">{{ $index + 1 }} - {{ aspek.aspek }}</p>
+                                    <a ng-href="#/training/{{ penilaianid }}" class="btn btn-default btn-flat">
+                                        <i class="fa fa-times fa-fw"></i> Batal
+                                    </a>
+                                    <button type="submit" class="btn btn-primary btn-flat" ng-disabled="jawapanpeserta.$invalid" ng-click="simpan()">
+                                        <i class="fa fa-save fa-fw"></i> Simpan
+                                    </button>
+                                </div>
+                            </div>
+
+                        </uib-tab>
+                        <uib-tab>
+                            <uib-tab-heading>
+                                <i class="fa fa-user fa-fw"></i> Penilaian Latihan Peserta
+                            </uib-tab-heading>
+
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="senaraiPenilaian">
+                                        <div class="row" ng-repeat="penilaian in form.senaraiPenilaian">
+                                            <div class="col-sm-12">
+                                                <p class="bahagian">{{ penilaian.bahagian }}</p>
+                                                <div class="row" ng-repeat="aspek in penilaian.skop">
+                                                    <div class="col-sm-9">
+                                                        <p class="aspek">{{ $index + 1 }} - {{ aspek.aspek }}</p>
+                                                    </div>
+                                                    <div class="col-sm-3 text-center">
+                                                        <label class="radio-inline">
+                                                            <input type="radio" ng-model="aspek.jawapan" value="5" ng-click="recalculate()"> 5
+                                                        </label>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" ng-model="aspek.jawapan" value="4" ng-click="recalculate()"> 4
+                                                        </label>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" ng-model="aspek.jawapan" value="3" ng-click="recalculate()"> 3
+                                                        </label>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" ng-model="aspek.jawapan" value="2" ng-click="recalculate()"> 2
+                                                        </label>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" ng-model="aspek.jawapan" value="1" ng-click="recalculate()"> 1
+                                                        </label>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" ng-model="aspek.jawapan" value="0" ng-click="recalculate()"> 0
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="col-sm-3 text-center">
-                                            <label class="radio-inline">
-                                                <input type="radio" ng-model="aspek.jawapan" value="5" ng-click="recalculate()"> 5
-                                            </label>
-                                            <label class="radio-inline">
-                                                <input type="radio" ng-model="aspek.jawapan" value="4" ng-click="recalculate()"> 4
-                                            </label>
-                                            <label class="radio-inline">
-                                                <input type="radio" ng-model="aspek.jawapan" value="3" ng-click="recalculate()"> 3
-                                            </label>
-                                            <label class="radio-inline">
-                                                <input type="radio" ng-model="aspek.jawapan" value="2" ng-click="recalculate()"> 2
-                                            </label>
-                                            <label class="radio-inline">
-                                                <input type="radio" ng-model="aspek.jawapan" value="1" ng-click="recalculate()"> 1
-                                            </label>
-                                            <label class="radio-inline">
-                                                <input type="radio" ng-model="aspek.jawapan" value="0" ng-click="recalculate()"> 0
-                                            </label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <tr class="font-bold bg-primary">
+                                                <td>Bahagian</td>
+                                                <td class="text-center">A</td>
+                                                <td class="text-center">B</td>
+                                                <td class="text-center">C</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Markah Bahagian Yang Diperolehi</td>
+                                                <td class="text-center">{{ form.markah_penilaian_A }}</td>
+                                                <td class="text-center">{{ form.markah_penilaian_B }}</td>
+                                                <td class="text-center">{{ form.markah_penilaian_C }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-uppercase">jumlah markah keseluruhan</td>
+                                                <td class="text-center bg-info" colspan="3">
+                                                    <strong class="text-primary">{{ form.totalMarkah }}</strong> x 100 / 50 = <span class="text-success">{{ form.peratusan }}%</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <hr />
+                                    <div class="text-right">
+                                        <a ng-href="#/training/{{ penilaianid }}" class="btn btn-default btn-flat">
+                                            <i class="fa fa-times fa-fw"></i> Batal
+                                        </a>
+                                        <button type="submit" class="btn btn-primary btn-flat" ng-disabled="jawapanpeserta.$invalid" ng-click="simpan()">
+                                            <i class="fa fa-save fa-fw"></i> Simpan
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </uib-tab>
+                        <uib-tab>
+                            <uib-tab-heading>
+                                <i class="fa fa-check fa-fw"></i> Pencapaian Penilaian Peserta
+                            </uib-tab-heading>
+
+                            <div class="senaraiPenilaian">
+                                <div class="row">
+                                    <div class="col-sm-6"></div>
+                                    <div class="col-sm-3 text-center text-uppercase">
+                                        Sebelum
+                                    </div>
+                                    <div class="col-sm-3 text-center text-uppercase">
+                                        Selepas
+                                    </div>
+                                </div>
+                                <div class="row" ng-repeat="penilaian in form.senaraiPencapaian">
+                                    <div class="col-sm-12">
+                                        <p class="bahagian">{{ penilaian.bahagian }}</p>
+                                        <div class="row" ng-repeat="aspek in penilaian.skop">
+                                            <div class="col-sm-6">
+                                                <p class="aspek">{{ $index + 1 }} - {{ aspek.aspek }}</p>
+                                            </div>
+                                            <div class="col-sm-3 text-center">
+                                                <label class="radio-inline">
+                                                    <input type="radio" ng-model="aspek.jawapanSebelum" value="5" ng-click="recalculate2()"> 5
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio" ng-model="aspek.jawapanSebelum" value="4" ng-click="recalculate2()"> 4
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio" ng-model="aspek.jawapanSebelum" value="3" ng-click="recalculate2()"> 3
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio" ng-model="aspek.jawapanSebelum" value="2" ng-click="recalculate2()"> 2
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio" ng-model="aspek.jawapanSebelum" value="1" ng-click="recalculate2()"> 1
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio" ng-model="aspek.jawapanSebelum" value="0" ng-click="recalculate2()"> 0
+                                                </label>
+                                            </div>
+                                            <div class="col-sm-3 text-center">
+                                                <label class="radio-inline">
+                                                    <input type="radio" ng-model="aspek.jawapanSelepas" value="5" ng-click="recalculate2()"> 5
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio" ng-model="aspek.jawapanSelepas" value="4" ng-click="recalculate2()"> 4
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio" ng-model="aspek.jawapanSelepas" value="3" ng-click="recalculate2()"> 3
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio" ng-model="aspek.jawapanSelepas" value="2" ng-click="recalculate2()"> 2
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio" ng-model="aspek.jawapanSelepas" value="1" ng-click="recalculate2()"> 1
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio" ng-model="aspek.jawapanSelepas" value="0" ng-click="recalculate2()"> 0
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <tr class="font-bold bg-primary">
-                                    <td>Bahagian</td>
-                                    <td class="text-center">A</td>
-                                    <td class="text-center">B</td>
-                                    <td class="text-center">C</td>
-                                </tr>
-                                <tr>
-                                    <td>Markah Bahagian Yang Diperolehi</td>
-                                    <td class="text-center">{{ form.markah_penilaian_A }}</td>
-                                    <td class="text-center">{{ form.markah_penilaian_B }}</td>
-                                    <td class="text-center">{{ form.markah_penilaian_C }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-uppercase">jumlah markah keseluruhan</td>
-                                    <td class="text-center bg-info" colspan="3">
-                                        <strong class="text-primary">{{ form.totalMarkah }}</strong> x 100 / 50 = <span class="text-success">{{ form.peratusan }}%</span>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                        <hr />
-                        <div class="text-right">
-                            <a ng-href="#/training/{{ penilaianid }}" class="btn btn-default">
-                                <i class="fa fa-times fa-fw"></i> Batal
-                            </a>
-                            <button type="submit" class="btn btn-primary" ng-disabled="jawapanpeserta.$invalid" ng-click="simpan()">
-                                <i class="fa fa-save fa-fw"></i> Simpan
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-            </uib-tab>
-            <uib-tab>
-                <uib-tab-heading>
-                    <i class="fa fa-check fa-fw"></i> Pencapaian Penilaian Peserta
-                </uib-tab-heading>
-
-                <div class="senaraiPenilaian">
-                    <div class="row">
-                        <div class="col-sm-6"></div>
-                        <div class="col-sm-3 text-center text-uppercase">
-                            Sebelum
-                        </div>
-                        <div class="col-sm-3 text-center text-uppercase">
-                            Selepas
-                        </div>
-                    </div>
-                    <div class="row" ng-repeat="penilaian in form.senaraiPencapaian">
-                        <div class="col-sm-12">
-                            <p class="bahagian">{{ penilaian.bahagian }}</p>
-                            <div class="row" ng-repeat="aspek in penilaian.skop">
-                                <div class="col-sm-6">
-                                    <p class="aspek">{{ $index + 1 }} - {{ aspek.aspek }}</p>
-                                </div>
-                                <div class="col-sm-3 text-center">
-                                    <label class="radio-inline">
-                                        <input type="radio" ng-model="aspek.jawapanSebelum" value="5" ng-click="recalculate2()"> 5
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input type="radio" ng-model="aspek.jawapanSebelum" value="4" ng-click="recalculate2()"> 4
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input type="radio" ng-model="aspek.jawapanSebelum" value="3" ng-click="recalculate2()"> 3
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input type="radio" ng-model="aspek.jawapanSebelum" value="2" ng-click="recalculate2()"> 2
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input type="radio" ng-model="aspek.jawapanSebelum" value="1" ng-click="recalculate2()"> 1
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input type="radio" ng-model="aspek.jawapanSebelum" value="0" ng-click="recalculate2()"> 0
-                                    </label>
-                                </div>
-                                <div class="col-sm-3 text-center">
-                                    <label class="radio-inline">
-                                        <input type="radio" ng-model="aspek.jawapanSelepas" value="5" ng-click="recalculate2()"> 5
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input type="radio" ng-model="aspek.jawapanSelepas" value="4" ng-click="recalculate2()"> 4
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input type="radio" ng-model="aspek.jawapanSelepas" value="3" ng-click="recalculate2()"> 3
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input type="radio" ng-model="aspek.jawapanSelepas" value="2" ng-click="recalculate2()"> 2
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input type="radio" ng-model="aspek.jawapanSelepas" value="1" ng-click="recalculate2()"> 1
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input type="radio" ng-model="aspek.jawapanSelepas" value="0" ng-click="recalculate2()"> 0
-                                    </label>
-                                </div>
+                            <hr />
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <tr class="font-bold bg-primary">
+                                        <td rowspan="2" style="vertical-align: bottom">Bahagian</td>
+                                        <td colspan="3" class="text-center">Sebelum</td>
+                                        <td colspan="3" class="text-center">Selepas</td>
+                                    </tr>
+                                    <tr class="font-bold bg-primary">
+                                        <td class="text-center">A</td>
+                                        <td class="text-center">B</td>
+                                        <td class="text-center">C</td>
+                                        <td class="text-center">A</td>
+                                        <td class="text-center">B</td>
+                                        <td class="text-center">C</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-bold bg-primary">Markah Bahagian Yang Diperolehi</td>
+                                        <td class="text-center">{{ form.markah_pencapaian_A_sebelum }}</td>
+                                        <td class="text-center">{{ form.markah_pencapaian_B_sebelum }}</td>
+                                        <td class="text-center">{{ form.markah_pencapaian_C_sebelum }}</td>
+                                        <td class="text-center">{{ form.markah_pencapaian_A_selepas }}</td>
+                                        <td class="text-center">{{ form.markah_pencapaian_B_selepas }}</td>
+                                        <td class="text-center">{{ form.markah_pencapaian_C_selepas }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-uppercase bg-primary">jumlah markah keseluruhan</td>
+                                        <td class="text-center bg-info" colspan="3">
+                                            <strong class="text-primary">{{ form.totalMarkah_pencapaian_sebelum }}</strong> x 100 / 50 =
+                                            <span class="text-success">{{ form.peratusan_pencapaian_sebelum }}%</span>
+                                        </td>
+                                        <td class="text-center bg-info" colspan="3">
+                                            <strong class="text-primary">{{ form.totalMarkah_pencapaian_selepas }}</strong> x 100 / 50 =
+                                            <span class="text-success">{{ form.peratusan_pencapaian_selepas }}%</span>
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <hr />
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <tr class="font-bold bg-primary">
-                            <td rowspan="2" style="vertical-align: bottom">Bahagian</td>
-                            <td colspan="3" class="text-center">Sebelum</td>
-                            <td colspan="3" class="text-center">Selepas</td>
-                        </tr>
-                        <tr class="font-bold bg-primary">
-                            <td class="text-center">A</td>
-                            <td class="text-center">B</td>
-                            <td class="text-center">C</td>
-                            <td class="text-center">A</td>
-                            <td class="text-center">B</td>
-                            <td class="text-center">C</td>
-                        </tr>
-                        <tr>
-                            <td class="font-bold bg-primary">Markah Bahagian Yang Diperolehi</td>
-                            <td class="text-center">{{ form.markah_pencapaian_A_sebelum }}</td>
-                            <td class="text-center">{{ form.markah_pencapaian_B_sebelum }}</td>
-                            <td class="text-center">{{ form.markah_pencapaian_C_sebelum }}</td>
-                            <td class="text-center">{{ form.markah_pencapaian_A_selepas }}</td>
-                            <td class="text-center">{{ form.markah_pencapaian_B_selepas }}</td>
-                            <td class="text-center">{{ form.markah_pencapaian_C_selepas }}</td>
-                        </tr>
-                        <tr>
-                            <td class="text-uppercase bg-primary">jumlah markah keseluruhan</td>
-                            <td class="text-center bg-info" colspan="3">
-                                <strong class="text-primary">{{ form.totalMarkah_pencapaian_sebelum }}</strong> x 100 / 50 =
-                                <span class="text-success">{{ form.peratusan_pencapaian_sebelum }}%</span>
-                            </td>
-                            <td class="text-center bg-info" colspan="3">
-                                <strong class="text-primary">{{ form.totalMarkah_pencapaian_selepas }}</strong> x 100 / 50 =
-                                <span class="text-success">{{ form.peratusan_pencapaian_selepas }}%</span>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <hr />
-                <div class="text-right">
-                    <a ng-href="#/training/{{ penilaianid }}" class="btn btn-default">
-                        <i class="fa fa-times fa-fw"></i> Batal
-                    </a>
-                    <button type="submit" class="btn btn-primary" ng-disabled="jawapanpeserta.$invalid" ng-click="simpan()">
-                        <i class="fa fa-save fa-fw"></i> Simpan
-                    </button>
-                </div>
+                            <hr />
+                            <div class="text-right">
+                                <a ng-href="#/training/{{ penilaianid }}" class="btn btn-default btn-flat">
+                                    <i class="fa fa-times fa-fw"></i> Batal
+                                </a>
+                                <button type="submit" class="btn btn-primary btn-flat" ng-disabled="jawapanpeserta.$invalid" ng-click="simpan()">
+                                    <i class="fa fa-save fa-fw"></i> Simpan
+                                </button>
+                            </div>
 
-            </uib-tab>
-        </uib-tabset>
+                        </uib-tab>
+                    </uib-tabset>
+                </div>
+            </form>
+        </div>
     </div>
-</form>
+
+</section>

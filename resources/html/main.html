@@ -1,10 +1,48 @@
-<ol class="breadcrumb">
-    <li class="active">
-        <i class="fa fa-home fa-fw"></i> Utama
-    </li>
-</ol>
-<div class="row">
-    <div class="col-sm-12">
-        Hello
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Utama
+        <small>Nurul adilah Training Management</small>
+    </h1>
+    <!--<ol class="breadcrumb">-->
+        <!--<li><a href="#"><i class="fa fa-dashboard"></i> Utama</a></li>-->
+        <!--<li><a href="#">Examples</a></li>-->
+        <!--<li class="active">Blank page</li>-->
+    <!--</ol>-->
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="box box-solid">
+                <div class="box-header ui-sortable-handle" style="cursor: move;">
+                    <i class="fa fa-line-chart fa-fw"></i>
+
+                    <h3 class="box-title">Jumlah Penilaian Latihan mengikut tahun dan bulan</h3>
+
+                    <div class="box-tools pull-right" style="width: 300px">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <select class="form-control" ng-model="form.tahunsblm" ng-options="year for year in yearList">
+                                    <option value="">Bermula tahun</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6">
+                                <select class="form-control" ng-model="form.tahunsehingga" ng-options="year for year in yearList">
+                                    <option value="">Hingga ke tahun</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body border-radius-none">
+                    <canvas id="line" style="height: 300px;" class="chart chart-line" chart-data="data" chart-labels="labels" chart-legend="true" chart-options="chartoptions" chart-series="series" >
+                    </canvas>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+
+</section><!-- /.content -->

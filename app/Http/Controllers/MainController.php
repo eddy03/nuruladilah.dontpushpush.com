@@ -11,62 +11,42 @@ use App\User;
 
 class MainController extends Controller
 {
-    public function homepage() {
-
+    public function homepage()
+    {
         if(Auth::check()) {
 
             if(Auth::user()->change_password) {
-
                 return view('changepassword');
-
-            }
-            else {
-
+            } else {
                 return view('app');
-
             }
 
-        }
-        else {
-
+        } else {
             return view('welcome');
-
         }
-
-
-
     }
 
-    public function authenticate(Request $request) {
-
+    public function authenticate(Request $request)
+    {
         if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
-
             return redirect()->intended('/');
-
+        } else {
+            return redirect('/')->with('errors', 'Nama pengguna atau kata laluan tidak tepat');
         }
-        else {
-
-            return redirect('/')->with('errors', 'Username or Password is not correct!');
-
-        }
-
     }
 
-    public function changepassword(Request $request) {
-
+    public function changepassword(Request $request)
+    {
         $user = User::find(Auth::user()->id);
-
         $user->password = bcrypt($request->password);
         $user->change_password = 0;
-
         $user->save();
 
         return redirect('/');
-
     }
 
-    public function logout() {
-
+    public function logout()
+    {
         Auth::logout();
 
         return redirect('/');

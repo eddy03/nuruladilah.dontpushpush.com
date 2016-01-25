@@ -1,11 +1,23 @@
 @import "bootstrap/bootstrap.less";
 @import "font-awesome/font-awesome.less";
-@import "bootswatch/variables.less";
-@import "bootswatch/bootswatch.less";
+@import "ionicons/ionicons.less";
+@import "chartJs/angular-chart.less";
+@import "Admin-LTE/AdminLTE.less";
+@import "Admin-LTE/skins/_all-skins.less";
+@import (inline) "angular-block-ui/angular-block-ui.css";
+@import (inline) "fullcalendar/fullcalendar.min.css";
+@import (inline) "fullcalendar/fullcalendar.print.css";
 
-body {
-  padding-top: 70px;
-  font-size: 16px;
+.cursors {
+  cursor: pointer;
+}
+
+.form-control {
+  color: inherit;
+}
+
+.tab-pane {
+  padding: 10px 0px;
 }
 
 .text-vertical-middle {
@@ -33,30 +45,10 @@ body {
 
 }
 
-.nav-tabs {
-  margin-bottom: 10px;
-}
+.ellipsis {
+  text-overflow: ellipsis;
 
-.tab-content {
-  margin-bottom: 20px;
-}
-
-.breadcrumb {
-  border: 0px;
-  background-color: transparent;
-  padding: 8px 0px;
-
-  a {
-    color: #004b63;
-  }
-}
-
-.nav-tabs {
-
-  > li {
-
-    > a {
-      color: #011d37;
-    }
-  }
+  /* Required for text-overflow to do anything */
+  white-space: nowrap;
+  overflow: hidden;
 }

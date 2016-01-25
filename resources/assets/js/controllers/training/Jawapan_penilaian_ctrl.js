@@ -18,6 +18,7 @@ angular.module('dylurp')
                     $scope.form = response.penilaian_latihan;
                     $scope.form.nama = response.nama;
                     $scope.form.peserta_id = response.id;
+                    $scope.namaPeserta = angular.copy($scope.form.nama);
 
                     JawapanModel.get({}, function(templateObj) {
 

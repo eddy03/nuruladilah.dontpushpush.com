@@ -11,8 +11,7 @@ angular.module('dylurp')
 
             //DatePicker Options and setting
             $scope.dateOptions = {
-                formatYear: 'yy',
-                startingDay: 1
+                startingDay: 1,
             };
             $scope.status = {
                 opened: false
