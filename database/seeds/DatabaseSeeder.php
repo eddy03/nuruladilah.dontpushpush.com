@@ -14,11 +14,18 @@ class DatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        $this->call(UserTableSeeder::class);
-        $this->call(BahagianPencapaianLatihanSeeder::class);
-        $this->call(BahagianPenilaianLatihanSeeder::class);
-        $this->call(SkopPencapaianLatihanSeeder::class);
-        $this->call(SkopPenilaianLatihanSeeder::class);
+        //Prevent seeding already seed data in production.
+//        $this->call(UserTableSeeder::class);
+//        $this->call(BahagianPencapaianLatihanSeeder::class);
+//        $this->call(BahagianPenilaianLatihanSeeder::class);
+//        $this->call(SkopPencapaianLatihanSeeder::class);
+//        $this->call(SkopPenilaianLatihanSeeder::class);
+        $this->call(KonfigurasiBahagianSeeder::class);
+        $this->call(SoalanKompetensiSeeder::class);
+        $this->call(BahagianBahagianBSeeder::class);
+        $this->call(KursusBahagianBSeeder::class);
+        $this->call(SetJawapanBahagianASeeder::class);
+        $this->call(SoalanBahagianASeeder::class);
 
         Model::reguard();
     }

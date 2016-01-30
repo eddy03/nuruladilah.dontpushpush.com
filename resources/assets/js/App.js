@@ -14,21 +14,37 @@ apps.config(['$routeProvider', '$httpProvider', 'blockUIConfig', function($route
             templateUrl: 'html/main.html',
             controller: 'MainCtrl'
         })
-        .when('/training', {
-            templateUrl: 'html/training/senarai_penilaian_latihan.html',
+        .when('/konfigurasi/bahagian', {
+            templateUrl: 'html/konfigurasi/bahagian/senarai.html',
+            controller: 'SenaraiBahagian'
+        })
+        .when('/penilaian', {
+            templateUrl: 'html/penilaian/senarai_penilaian_latihan.html',
             controller: 'SenaraiPenilaianLatihan'
         })
-        .when('/training/:penilaianId', {
-            templateUrl: 'html/training/penilaian_latihan.html',
+        .when('/penilaian/:penilaianId', {
+            templateUrl: 'html/penilaian/penilaian_latihan.html',
             controller: 'PenilaianLatihan'
         })
-        .when('/training/:penilaianId/daftarjawapan', {
-            templateUrl: 'html/training/daftar_jawapan_penilaian.html',
+        .when('/penilaian/:penilaianId/daftarjawapan', {
+            templateUrl: 'html/penilaian/daftar_jawapan_penilaian.html',
             controller: 'DaftarJawapanPenilaian'
         })
-        .when('/training/:penilaianId/:pesertaId', {
-            templateUrl: 'html/training/jawapan_penilaian.html',
+        .when('/penilaian/:penilaianId/:pesertaId', {
+            templateUrl: 'html/penilaian/jawapan_penilaian.html',
             controller: 'JawapanPenilaian'
+        })
+        .when('/analisa', {
+            templateUrl: 'html/analisa/senarai.html',
+            controller: 'SenaraiAnalisaLatihan'
+        })
+        .when('/analisa/baru', {
+            templateUrl: 'html/analisa/maklumat.html',
+            controller: 'MaklumatAnalisaLatihan'
+        })
+        .when('/analisa/maklumat/:analisaId', {
+            templateUrl: 'html/analisa/maklumat.html',
+            controller: 'MaklumatAnalisaLatihan'
         })
         .when('/profile', {
             templateUrl: 'html/profile.html',

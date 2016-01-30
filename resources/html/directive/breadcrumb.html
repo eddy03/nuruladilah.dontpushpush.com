@@ -1,0 +1,14 @@
+<li>
+    <a href="#/">
+        <i class="fa fa-dashboard"></i>
+        Utama
+    </a>
+</li>
+<li ng-repeat="menu in previousmenu">
+    <a ng-href="#/{{ menu.url }}">
+        {{ menu.label }}
+    </a>
+</li>
+<li class="active">
+    {{ currentmenu }}
+</li>

@@ -1,7 +1,7 @@
 <!-- Left side column. contains the sidebar -->
 <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
+    <section class="sidebar" ng-controller="sidebarCtrl">
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
@@ -9,7 +9,7 @@
             </div>
             <div class="pull-left info">
                 <p>{{ Auth::user()->username }}</p>
-                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                <a href=""><i class="fa fa-circle text-success"></i> online</a>
             </div>
         </div>
         <!-- search form -->
@@ -25,14 +25,22 @@
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">
             <li class="header text-uppercase">Navigasi Utama</li>
-            <li><a href="{{ route('homepage') }}"><i class="fa fa-dashboard fa-fw"></i> <span>Utama</span></a></li>
-            <li class="treeview">
+            <li ng-class="{'active': currentURLFirst == ''}"><a href="#/"><i class="fa fa-dashboard fa-fw"></i> <span>Utama</span></a></li>
+            <li ng-class="{'active': currentURLFirst == 'konfigurasi'}" class="treeview">
+                <a href="">
+                    <i class="fa fa-cogs fa-fw"></i> <span>Konfigurasi</span> <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li ng-class="{'active': currentURLSecond == 'bahagian'}"><a href="#/konfigurasi/bahagian"><i class="fa fa-circle-o"></i> Bahagian</a></li>
+                </ul>
+            </li>
+            <li ng-class="{'active': currentURLFirst == 'analisa' || currentURLFirst == 'penilaian'}" class="treeview">
                 <a href="">
                     <i class="fa fa-book fa-fw"></i> <span>Latihan</span> <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="#/training"><i class="fa fa-circle-o"></i> Latihan V1</a></li>
-                    <li><a href="#/trainingv2"><i class="fa fa-circle-o"></i> Latihan v2</a></li>
+                    <li ng-class="{'active': currentURLFirst == 'analisa'}"><a href="#/analisa"><i class="fa fa-circle-o"></i> Analisa</a></li>
+                    <li ng-class="{'active': currentURLFirst == 'penilaian'}"><a href="#/penilaian"><i class="fa fa-circle-o"></i> Penilaian</a></li>
                 </ul>
             </li>
         </ul>

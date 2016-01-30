@@ -1,0 +1,182 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Maklumat Penilaian Latihan
+    </h1>
+    <ol data-breadcrumb class="breadcrumb" data-previousmenu='[{"url": "penilaian", "label": "Senarai Latihan"}]' data-currentmenu="Maklumat Penilaian Latihan"></ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Maklumat Penilaian Latihan</h3>
+
+            <div class="box-tools">
+                <div class="text-right" style="width: 150px;">
+                    <a ng-href="#/penilaian/{{ penilaianid }}/daftarjawapan" class="btn btn-success btn-flat btn-sm" ng-hide="penilaianLatihan.peserta.length == penilaianLatihan.bilanganPeserta">
+                        <i class="fa fa-user-plus fa-fw"></i> Tambah Peserta
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+
+            <uib-tabset>
+                <uib-tab>
+                    <uib-tab-heading>
+                        <i class="fa fa-file-text-o fa-fw"></i> <span class="hidden-sm hidden-xs hidden-sm hidden-md">Penilaian Latihan</span>
+                    </uib-tab-heading>
+
+                    <form class="form-horizontal" ng-submit="updateLatihan()">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Tajuk Kursus</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" ng-model="penilaianLatihan.tajuk" placeholder="Tajuk kursus" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Tarikh Kursus</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" ng-model="penilaianLatihan.tarikh" placeholder="Tarikh kursus" uib-datepicker-popup="dd/MM/yyyy" datepicker-append-to-body="true" is-open="status.opened" datepicker-options="dateOptions" readonly required />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="opendatepicker($event)">
+                                            <i class="fa fa-calendar fa-fw"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Tempat Kursus</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" ng-model="penilaianLatihan.tempat" placeholder="Tempat kursus" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Penganjur</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" ng-model="penilaianLatihan.penganjur" placeholder="Penganjur" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Bilangan Peserta</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" ng-model="penilaianLatihan.bilanganPeserta" placeholder="Bilangan Peserta" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 text-right">
+                                <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-save fa-fw"></i> Simpan</button>
+                            </div>
+                        </div>
+                    </form>
+                </uib-tab>
+                <uib-tab>
+                    <uib-tab-heading>
+                        <i class="fa fa-list fa-fw"></i> <span class="hidden-sm hidden-xs hidden-sm hidden-md">Senarai Peserta</span>
+                    </uib-tab-heading>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="text-vertical-middle text-center" rowspan="2" width="40px">#</th>
+                                <th class="text-vertical-middle" rowspan="2">Nama Peserta</th>
+                                <th class="text-center" colspan="3">Markah</th>
+                                <th class="text-vertical-middle" rowspan="2" width="40px"></th>
+                            </tr>
+                            <tr>
+                                <th class="text-center" width="200px">Markah Bahagian 1</th>
+                                <th class="text-center" width="200px">Markah Bahagian 3 (Sblm.)</th>
+                                <th class="text-center" width="200px">Markah Bahagian 3 (Selps.)</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="peserta in penilaianLatihan.peserta">
+                                <td class="text-center">{{ $index + 1 }}</td>
+                                <td>
+                                    <a ng-href="#/penilaian/{{ penilaianid }}/{{ peserta.id }}">{{ peserta.nama }}</a>
+                                </td>
+                                <td class="text-center">
+                                    {{ peserta.markah_penilaian_A + peserta.markah_penilaian_B + peserta.markah_penilaian_C }} / 50
+                                    <i class="fa fa-ellipsis-v fa-fw"></i>
+                                    <strong class="text-primary">{{ (peserta.markah_penilaian_A + peserta.markah_penilaian_B + peserta.markah_penilaian_C) * 100 / 50 }}%</strong>
+                                </td>
+                                <td class="text-center">
+                                    {{ peserta.markah_pencapaian_A_sebelum + peserta.markah_pencapaian_B_sebelum + peserta.markah_pencapaian_C_sebelum }} / 50
+                                    <i class="fa fa-ellipsis-v fa-fw"></i>
+                                    <strong class="text-primary">{{ (peserta.markah_pencapaian_A_sebelum + peserta.markah_pencapaian_B_sebelum + peserta.markah_pencapaian_C_sebelum) * 100 / 50 }}%</strong>
+                                </td>
+                                <td class="text-center">
+                                    {{ peserta.markah_pencapaian_A_selepas + peserta.markah_pencapaian_B_selepas + peserta.markah_pencapaian_C_selepas }} / 50
+                                    <i class="fa fa-ellipsis-v fa-fw"></i>
+                                    <strong class="text-primary">{{ (peserta.markah_pencapaian_A_selepas + peserta.markah_pencapaian_B_selepas + peserta.markah_pencapaian_C_selepas) * 100 / 50 }}%</strong>
+                                </td>
+                                <td class="text-center">
+                                    <a ng-href="#/penilaian/{{ penilaianid }}/{{ peserta.id }}"><i class="fa fa-pencil fa-fw"></i></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </uib-tab>
+                <uib-tab>
+                    <uib-tab-heading>
+                        <i class="fa fa-bar-chart-o fa-fw"></i> <span class="hidden-sm hidden-xs hidden-sm hidden-md">Statistik Penilaian Latihan (Peserta)</span>
+                    </uib-tab-heading>
+
+                    <div class="row">
+                        <div class="col-lg-4 col-xs-12">
+                            <p class="lead">
+                                Jumlah markah keseluruhan : {{ totalMarkah }} daripada {{ jumlahKeseluruhanMarkah }}.<br />
+                                <span class="text-danger">
+                                    JUMLAH PERATUSAN : {{ totalMarkah / jumlahKeseluruhanMarkah * 100 | number:2 }} %
+                                </span>
+                            </p>
+                        </div>
+                        <div class="col-lg-8 col-xs-12">
+                            <div style="overflow-x: auto;">
+                                <div id="chart" style="width: 900px; height: 400px"></div>
+                            </div>
+                        </div>
+                    </div>
+                </uib-tab>
+                <uib-tab>
+                    <uib-tab-heading>
+                        <i class="fa fa-bar-chart-o fa-fw"></i> <span class="hidden-sm hidden-xs hidden-sm hidden-md">Statistik Keberkesanan Latihan (Ketua Bahagian)</span>
+                    </uib-tab-heading>
+
+                    <div class="row">
+                        <div class="col-lg-4 col-xs-12">
+                            <p class="lead">
+                                Jumlah markah keseluruhan Sebelum : {{ totalMarkahSebelum }} daripada {{ jumlahKeseluruhanMarkah }}.<br />
+                                Jumlah markah keseluruhan Selepas : {{ totalMarkahSelepas }} daripada {{ jumlahKeseluruhanMarkah }}.<br />
+                            </p>
+                            <hr />
+                            <p class="lead">
+                                <span class="text-danger">
+                                    JUMLAH PERATUSAN SEBELUM : {{ totalMarkahSebelum / jumlahKeseluruhanMarkah * 100 | number:2 }} %
+                                </span><br />
+                                <span class="text-danger">
+                                    JUMLAH PERATUSAN SELEPAS : {{ totalMarkahSelepas / jumlahKeseluruhanMarkah * 100 | number:2 }} %
+                                </span>
+                            </p>
+                        </div>
+                        <div class="col-lg-8 col-xs-12">
+                            <div style="overflow-x: auto;">
+                                <div id="chart2" style="width: 900px; height: 400px"></div>
+                            </div>
+                        </div>
+                    </div>
+                </uib-tab>
+            </uib-tabset>
+
+        </div>
+
+    </div>
+
+</section>

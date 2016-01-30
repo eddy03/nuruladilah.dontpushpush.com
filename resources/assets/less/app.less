@@ -5,8 +5,6 @@
 @import "Admin-LTE/AdminLTE.less";
 @import "Admin-LTE/skins/_all-skins.less";
 @import (inline) "angular-block-ui/angular-block-ui.css";
-@import (inline) "fullcalendar/fullcalendar.min.css";
-@import (inline) "fullcalendar/fullcalendar.print.css";
 
 .cursors {
   cursor: pointer;
@@ -51,4 +49,44 @@
   /* Required for text-overflow to do anything */
   white-space: nowrap;
   overflow: hidden;
+}
+
+.nav-tabs > li.active > a {
+  color: #000 !important;
+}
+
+.soalan-blocks {
+  border-bottom: 1px solid #ccc;
+  padding-top: 10px;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  > .lead {
+    font-weight: bolder;
+    margin-bottom: 0px;
+  }
+
+  > .questions {
+    margin-bottom: 10px;
+
+    > .block-grey {
+      display: block;
+      background-color: #eee;
+      font-weight: 600;
+      text-align: center;
+      padding: 5px 0px 5px 0px;
+    }
+
+    strong {
+      line-height: 35px;
+    }
+  }
+}
+
+.soalanBhgA {
+  li {
+    margin-bottom: 20px;
+  }
 }

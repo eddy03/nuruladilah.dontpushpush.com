@@ -1,0 +1,50 @@
+<div class="modal-header">
+    <h3 class="modal-title">
+        <i class="fa fa-plus fa-fw"></i> Tambah Bahagian Baru
+    </h3>
+</div>
+<form class="form-horizontal">
+    <div class="modal-body">
+        <div class="form-group" ng-class="{'has-error': err.have}">
+            <label class="control-label col-sm-3">Bahagian <span class="text-danger">*</span></label>
+            <div class="col-sm-9">
+                <input type="text" name="nama" ng-model="form.nama" class="form-control" placeholder="Nama bahagian" ng-focus="removeError()" />
+                <span class="help-block" ng-show="err.have">{{ err.msg }}</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3">Induk?</label>
+            <div class="col-sm-9">
+                <div class="radio">
+                    <label>
+                        <input type="radio" ng-model="form.induk" ng-value="true"> Ya
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" ng-model="form.induk" ng-value="false"> Tidak
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" ng-hide="form.induk">
+            <label class="control-label col-sm-3">Bahagian induk</label>
+            <div class="col-sm-9">
+                <select class="form-control" ng-model="form.bahagian_id" ng-options="bhg.id as bhg.nama for bhg in senaraiBahagian">
+                    <option value="">--Sila Pilih Bahagian--</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default btn-flat" type="button" ng-click="cancel()">
+            <i class="fa fa-times fa-fw"></i> Tutup
+        </button>
+        <button class="btn btn-danger btn-flat" type="button" ng-click="delete()" ng-show="form.id">
+            <i class="fa fa-trash-o fa-fw"></i> Padam
+        </button>
+        <button class="btn btn-primary btn-flat" type="submit" ng-click="ok()">
+            <i class="fa fa-save fa-fw"></i> Simpan
+        </button>
+    </div>
+</form>

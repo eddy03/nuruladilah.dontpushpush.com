@@ -42,11 +42,11 @@ elixir(function(mix) {
             'lib/exporting.js',
             'lib/icheck.min.js',
             'lib/moment.js',
-            'lib/fullcalendar.min.js',
             'lib/Chart.min.js',
             'lib/angular-chart.min.js',
             'lib/app.min.js',
             'App.js',
+            'directive',
             'models',
             'controllers'
         ], 'public/js/app.js')

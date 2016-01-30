@@ -21,7 +21,7 @@ angular.module('dylurp')
 
         var generateFirstChart = function() {
 
-            $http.get('/dashboard', {params: $scope.form})
+            $http.get('API/v1/dashboard', {params: $scope.form})
                 .then(function(results) {
 
                     $scope.series = [];
@@ -60,7 +60,5 @@ angular.module('dylurp')
         $scope.$watch('form', function() {
             generateFirstChart();
         }, true);
-
-        $('#calendar').fullCalendar();
 
     }]);
