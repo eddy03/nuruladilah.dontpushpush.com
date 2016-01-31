@@ -11,12 +11,11 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="box box-solid">
-                <div class="box-header ui-sortable-handle" style="cursor: move;">
-                    <i class="fa fa-line-chart fa-fw"></i>
+                <div class="box-header">
 
-                    <h3 class="box-title">Jumlah Penilaian Latihan mengikut tahun dan bulan</h3>
+                    <h3 class="box-title"><i class="fa fa-line-chart fa-fw"></i> Jumlah Penilaian Latihan mengikut tahun dan bulan</h3>
 
-                    <div class="box-tools pull-right" style="width: 300px">
+                    <div class="box-tools pull-right hidden-xs hidden-sm" style="width: 300px">
                         <div class="row">
                             <div class="col-sm-6">
                                 <select class="form-control" ng-model="form.tahunsblm" ng-options="year for year in yearList">
@@ -28,6 +27,19 @@
                                     <option value="">Hingga ke tahun</option>
                                 </select>
                             </div>
+                        </div>
+                    </div>
+                    <div class="row hidden-md hidden-lg">
+                        <hr style="margin: 5px;" />
+                        <div class="col-xs-6">
+                            <select class="form-control" ng-model="form.tahunsblm" ng-options="year for year in yearList">
+                                <option value="">Bermula tahun</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6">
+                            <select class="form-control" ng-model="form.tahunsehingga" ng-options="year for year in yearList">
+                                <option value="">Hingga ke tahun</option>
+                            </select>
                         </div>
                     </div>
                 </div>

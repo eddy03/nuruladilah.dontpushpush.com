@@ -11,10 +11,10 @@
 
     <div class="box">
         <div class="box-header">
-            <h3 class="box-title">Senarai Bahagian</h3>
+            <h3 class="box-title hidden-xs hidden-sm">Senarai Bahagian</h3>
 
-            <div class="box-tools">
-                <div class="input-group input-group-sm" style="width: 550px;">
+            <div class="box-tools hidden-xs hidden-sm">
+                <div class="input-group input-group-sm" style="width: 350px;">
                     <input type="text" name="table_search" class="form-control pull-right" disabled placeholder="Search">
 
                     <div class="input-group-btn">
@@ -23,6 +23,8 @@
                     </div>
                 </div>
             </div>
+
+            <button type="button" class="btn btn-primary btn-flat btn-block hidden-md hidden-lg" ng-click="tambahBahagian()"><i class="fa fa-plus fa-fw"></i> Tambah Bahagian</button>
         </div>
         <!-- /.box-header -->
         <div class="box-body table-responsive no-padding">
