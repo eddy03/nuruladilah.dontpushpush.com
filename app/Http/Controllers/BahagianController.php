@@ -21,7 +21,7 @@ class BahagianController extends Controller
 
         foreach($bahagian as $key=>$bhg) {
             if($bhg->bahagian_id != 0) {
-                $bahagian[$key]->parent = Bahagian::where('id', $bhg->bahagian_id)->first(['nama']);
+                $bahagian[$key]->parent = Bahagian::where('id', $bhg->bahagian_id)->first(['nama', 'id']);
             }
         }
 

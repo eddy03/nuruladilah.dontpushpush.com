@@ -28,7 +28,10 @@ class AnalisaController extends Controller
         $anggotaAnalisa = AnggotaAnalisa::all();
 
         foreach($anggotaAnalisa as $i => $anggota) {
-            $anggotaAnalisa[$i]->bahagian = $anggota->bahagian;
+            $anggota->bahagian;
+            $anggota->jawapanKompetensi;
+            $anggota->jawapanBhgA;
+            $anggota->jawapanBhgB;
         }
 
         return $anggotaAnalisa;

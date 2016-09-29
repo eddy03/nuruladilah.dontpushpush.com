@@ -40,6 +40,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li ng-class="{'active': currentURLFirst == 'analisa'}"><a href="#/analisa"><i class="fa fa-circle-o"></i> Analisa</a></li>
+                    <li ng-class="{'active': currentURLFirst == 'analisa'}"><a href="#/analisa/statistik"><i class="fa fa-circle-o"></i> Statistik Analisa</a></li>
                     <li ng-class="{'active': currentURLFirst == 'penilaian'}"><a href="#/penilaian"><i class="fa fa-circle-o"></i> Penilaian</a></li>
                 </ul>
             </li>
