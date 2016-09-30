@@ -5,7 +5,8 @@ var apps = angular.module('dylurp', [
     'ngResource',
     'ui.bootstrap',
     'blockUI',
-    'chart.js'
+    'chart.js',
+    'highcharts-ng'
 ]);
 
 apps.config(['$routeProvider', '$httpProvider', 'blockUIConfig', function($routeProvider, $httpProvider, blockUIConfig) {
@@ -38,11 +39,11 @@ apps.config(['$routeProvider', '$httpProvider', 'blockUIConfig', function($route
             templateUrl: 'html/analisa/senarai.html',
             controller: 'SenaraiAnalisaLatihan'
         })
-        .when('/analisa/statistik', {
+        .when('/statistika', {
             templateUrl: 'html/analisa/statistik.html',
             controller: 'AnalisaStatistik'
         })
-        .when('/analisa/statistikb', {
+        .when('/statistikb', {
             templateUrl: 'html/analisa/statistik_b.html',
             controller: 'AnalisaStatistikB'
         })

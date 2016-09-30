@@ -34,13 +34,14 @@
                     <li ng-class="{'active': currentURLSecond == 'bahagian'}"><a href="#/konfigurasi/bahagian"><i class="fa fa-circle-o"></i> Bahagian</a></li>
                 </ul>
             </li>
-            <li ng-class="{'active': currentURLFirst == 'analisa' || currentURLFirst == 'penilaian'}" class="treeview">
+            <li ng-class="{'active': currentURLFirst == 'analisa' || currentURLFirst == 'penilaian' || currentURLFirst == 'statistika' || currentURLFirst == 'statistikb'}" class="treeview">
                 <a href="">
                     <i class="fa fa-book fa-fw"></i> <span>Latihan</span> <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
                     <li ng-class="{'active': currentURLFirst == 'analisa'}"><a href="#/analisa"><i class="fa fa-circle-o"></i> Analisa</a></li>
-                    <li ng-class="{'active': currentURLFirst == 'analisa'}"><a href="#/analisa/statistik"><i class="fa fa-circle-o"></i> Statistik Analisa</a></li>
+                    <li ng-class="{'active': currentURLFirst == 'statistika'}"><a href="#/statistika"><i class="fa fa-circle-o"></i> Statistik Analisa Bahagian A</a></li>
+                    <li ng-class="{'active': currentURLFirst == 'statistikb'}"><a href="#/statistikb"><i class="fa fa-circle-o"></i> Statistik Analisa Bahagian B</a></li>
                     <li ng-class="{'active': currentURLFirst == 'penilaian'}"><a href="#/penilaian"><i class="fa fa-circle-o"></i> Penilaian</a></li>
                 </ul>
             </li>

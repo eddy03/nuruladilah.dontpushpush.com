@@ -6,8 +6,60 @@ angular.module('dylurp')
         'BahagianModel',
         function($scope, $http, AnalisaLatihanModel, BahagianModel) {
 
+            var setJawapanBahagianB = null;
             var seriesAll = [];
             $scope.allData = [];
+            $scope.bahagianB = [];
+            $scope.bahagianBDefault = null;
+            $scope.listOfBahagian = null;
+            $scope.selectedBahagian = null;
+            $scope.chartsOption = [];
+            $scope.listOfAnalisa = [];
+
+            var chartStructure = {
+                options: {
+                    chart: {
+                        type: 'column'
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y} jawapan</b></td></tr>',
+                        footerFormat: '</table>',
+                        shared: true,
+                        useHTML: true
+                    }
+                },
+                title: {
+                    text: 'Hello'
+                },
+                xAxis: {
+                    categories: [],
+                    crosshair: true,
+                    title: {
+                        text: 'Sub bahagian kursus'
+                    }
+                },
+                yAxis: {
+                    allowDecimals: false,
+                    min: 0,
+                    title: {
+                        text: 'Jumlah jawapan'
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                    }
+                },
+                useHighStocks: false,
+                series: [],
+                //function (optional)
+                func: function (chart) {
+                    //setup some logic for the chart
+                }
+            };
 
             init();
 
@@ -16,9 +68,8 @@ angular.module('dylurp')
                 $http.get('API/v1/latihan/analisa/soalan', {})
                     .then(function(results) {
 
-                        var setJawapanBahagianB = angular.copy(results.data.soalanBhgB);
-
-                        _.each(setJawapanBahagianB, function(bhg) {
+                        $scope.bahagianB = angular.copy(results.data.soalanBhgB);
+                        _.each($scope.bahagianB, function(bhg) {
                             _.each(bhg.kursus, function(k) {
                                 k.totalSangatPerlu = 0;
                                 k.totalPerlu = 0;
@@ -26,97 +77,17 @@ angular.module('dylurp')
                             });
                         });
 
-                        var setJawapanBahagianASoalan2 = _.find(results.data.soalanBhgA, {id: 2}).set_jawapan;
-                        _.each(setJawapanBahagianASoalan2, function(o) {
-                            o.total = 0;
-                        });
+                        $scope.bahagianBDefault = angular.copy($scope.bahagianB);
 
                         BahagianModel.query({}, function(responseBahagian) {
 
-                            seriesAll = responseBahagian;
-
-                            // Init results object
-                            _.each(seriesAll, function(rb) {
-                                rb.bahagianA = {
-                                    soalan1: {ya: 0, tidak: 0},
-                                    soalan2: angular.copy(setJawapanBahagianASoalan2),
-                                    soalan3: {ya: 0, tidak: 0},
-                                    soalan4: {less: 0, more: 0},
-                                }
-                                rb.bahagianB = angular.copy(setJawapanBahagianB);
-                            });
+                            $scope.listOfBahagian = angular.copy(responseBahagian);
 
                             AnalisaLatihanModel.query({}, function(responseAnalisa) {
 
-                                _.each(responseAnalisa, function(analisa) {
+                                $scope.listOfAnalisa = angular.copy(responseAnalisa);
 
-                                    var RBIndex = _.findIndex(seriesAll, function(o) {
-                                        return o.id == analisa.bahagian_id
-                                    });
-
-                                    _.each(analisa.jawapan_bhg_a, function(ja) {
-
-                                        if(ja.soalan_analisa_bhg_a_id == 1) {
-                                            if(ja.jawapan == 1) {
-                                                seriesAll[RBIndex].bahagianA.soalan1.ya++;
-                                            } else {
-                                                seriesAll[RBIndex].bahagianA.soalan1.tidak++;
-                                            }
-                                        } else if(ja.soalan_analisa_bhg_a_id == 3) {
-                                            if(ja.jawapan == 1) {
-                                                seriesAll[RBIndex].bahagianA.soalan3.ya++;
-                                            } else {
-                                                seriesAll[RBIndex].bahagianA.soalan3.tidak++;
-                                            }
-                                        } else if(ja.soalan_analisa_bhg_a_id == 4) {
-                                            if(ja.jawapan == 1) {
-                                                seriesAll[RBIndex].bahagianA.soalan4.less++;
-                                            } else {
-                                                seriesAll[RBIndex].bahagianA.soalan4.more++;
-                                            }
-                                        } else if(ja.soalan_analisa_bhg_a_id == null) {
-
-                                            if(ja.jawapan == 1) {
-                                                var S2Index = _.findIndex(seriesAll[RBIndex].bahagianA.soalan2, function(o) {
-                                                    return o.id == ja.set_jawapan_soalan_analisa_bhg_a_id
-                                                });
-                                                seriesAll[RBIndex].bahagianA.soalan2[S2Index].total++;
-                                            }
-                                        }
-                                    });
-
-                                    _.each(analisa.jawapan_bhg_b, function(jb) {
-
-                                        var akb = jb.analisa_kursus_bahagian_b_id;
-                                        var indexOfSection = -1;
-                                        var indexOfKursus = -1;
-
-                                        _.each(seriesAll[RBIndex].bahagianB, function(questionSection, i) {
-
-                                            var indexOfKursusInside = _.findIndex(questionSection.kursus, function(k) {
-                                                return k.id == akb;
-                                            });
-
-                                            if(indexOfKursusInside != -1) {
-                                                indexOfSection = i;
-                                                indexOfKursus = angular.copy(indexOfKursusInside);
-                                            }
-
-                                        });
-
-                                        if(jb.jawapan == 1) {
-                                            seriesAll[RBIndex].bahagianB[indexOfSection].kursus[indexOfKursus].totalSangatPerlu++;
-                                        } else if(jb.jawapan == 2) {
-                                            seriesAll[RBIndex].bahagianB[indexOfSection].kursus[indexOfKursus].totalPerlu++;
-                                        } else if(jb.jawapan == 3) {
-                                            seriesAll[RBIndex].bahagianB[indexOfSection].kursus[indexOfKursus].totalTidakPerlu++;
-                                        }
-
-                                    });
-
-                                });
-
-                                question1Generate();
+                                $scope.selectedBahagian = '1';
 
                             }, function(err) {
                                 console.error(err);
@@ -132,255 +103,70 @@ angular.module('dylurp')
 
             }
 
-            function question1Generate() {
-                var series = [];
-                var label = [];
-                var categories = _.map(seriesAll, 'nama');
+            $scope.$watch('selectedBahagian', function(b) {
 
-                label.push({
-                    title: 'Soalan 1',
-                    sub: 'Pada pendapat anda, adakah organisasi anda menyediakan peluang untuk meningkatkan pengetahuan dan kemahiran anda dalam bidang utama kerja?'
-                });
-                series.push({
-                    data: [{
-                        name: 'Ya',
-                        data: []
-                    }, {
-                        name: 'Tidak',
-                        data: []
-                    }]
-                });
+                $scope.chartsOption = [];
+                $scope.bahagianB = angular.copy($scope.bahagianBDefault);
 
-                label.push({
-                    title: 'Soalan 2',
-                    sub: 'Pada pendapat anda, apakah metodologi/kaedah latihan yang lebih berkesan untuk meningkatkan kualiti kerja anda?'
-                });
-                series.push({
-                    data: [{
-                        name: 'Seminar',
-                        data: []
-                    }, {
-                        name: 'Ceramah',
-                        data: []
-                    }, {
-                        name: 'Bengkel',
-                        data: []
-                    }, {
-                        name: 'Amali/Latih Amal',
-                        data: []
-                    }]
-                });
+                // Todo : this can be improve, but hey...there is nothing need to be improve
+                _.each($scope.listOfAnalisa, function(analisa) {
 
-                label.push({
-                    title: 'Soalan 3',
-                    sub: 'Bolehkah kursus/latihan yang disediakan dan dihadiri membantu meningkatkan kecekapan kerja/tugasan anda?'
-                });
-                series.push({
-                    data: [{
-                        name: 'Ya',
-                        data: []
-                    }, {
-                        name: 'Tidak',
-                        data: []
-                    }]
-                });
+                    if(analisa.bahagian_id == b) {
 
-                label.push({
-                    title: 'Soalan 4',
-                    sub: 'Secara amnya, berapa lamakah anda sanggup menghadiri sesuatu kursus/latihan?'
-                });
-                series.push({
-                    data: [{
-                        name: 'Kurang 3 hari',
-                        data: []
-                    }, {
-                        name: 'Lebih 3 hari',
-                        data: []
-                    }]
-                });
+                        _.each(analisa.jawapan_bhg_b, function(jwpB) {
 
-                _.each(seriesAll, function(ad) {
+                            _.each($scope.bahagianB, function(charData) {
 
-                    series[0].data[0].data.push(ad.bahagianA.soalan1.ya);
-                    series[0].data[1].data.push(ad.bahagianA.soalan1.tidak);
+                                var index = _.findIndex(charData.kursus, {id: jwpB.analisa_kursus_bahagian_b_id});
 
-                    series[1].data[0].data.push(ad.bahagianA.soalan2[0].total);
-                    series[1].data[1].data.push(ad.bahagianA.soalan2[1].total);
-                    series[1].data[2].data.push(ad.bahagianA.soalan2[2].total);
-                    series[1].data[3].data.push(ad.bahagianA.soalan2[3].total);
+                                if(index != -1) {
 
-                    series[2].data[0].data.push(ad.bahagianA.soalan3.ya);
-                    series[2].data[1].data.push(ad.bahagianA.soalan3.tidak);
+                                    if(jwpB.jawapan == 1) {
+                                        charData.kursus[index].totalSangatPerlu++;
+                                    } else if(jwpB.jawapan == 2) {
+                                        charData.kursus[index].totalPerlu++;
+                                    } else if(jwpB.jawapan == 3) {
+                                        charData.kursus[index].totalTidakPerlu++;
+                                    }
 
-                    series[3].data[0].data.push(ad.bahagianA.soalan4.less);
-                    series[3].data[1].data.push(ad.bahagianA.soalan4.more);
+                                }
 
-                });
-
-                generateChart('#chart11', label[0], categories, series[0].data);
-                generateChart('#chart12', label[1], categories, series[1].data);
-                generateChart('#chart13', label[2], categories, series[2].data);
-                generateChart('#chart14', label[3], categories, series[3].data);
-
-                // generateChart('#chart11', {
-                //     title: 'Soalan 1',
-                //     sub: 'Pada pendapat anda, adakah organisasi anda menyediakan peluang untuk meningkatkan pengetahuan dan kemahiran anda dalam bidang utama kerja?'
-                // }, {
-                //     name: 'Jawapan',
-                //     colorByPoint: true,
-                //     data: [{
-                //         name: 'Ya',
-                //         y: 56.33
-                //     }, {
-                //         name: 'Tidak',
-                //         y: 24.03
-                //     }]
-                // });
-
-            }
-
-            function question2Generate() {
-
-                var categories = _.map(seriesAll, 'nama');
-                var blocksOfCharts = [];
-
-                _.each(seriesAll[0].bahagianB, function(b, i) {
-
-                    var SeriesStructure = [];
-                    _.each(b.kursus, function(K) {
-                        SeriesStructure.push({
-                            name: K.kursus,
-                            data: [],
-                            stack: null
-                        });
-                    });
-
-                    blocksOfCharts.push({
-                        id: angular.copy(b.id),
-                        el: 'chart2'+ (i+1).toString(),
-                        categories: angular.copy(categories),
-                        label: angular.copy(b.bahagian),
-                        series: angular.copy(SeriesStructure)
-                    });
-
-                });
-
-                console.log('Blocks Of Charts ', blocksOfCharts);
-
-                // According to department
-                _.each(seriesAll, function(SA, i) {
-
-                    // According to question section
-                    _.each(SA.bahagianB, function(SAB, j) {
-
-                        console.log(blocksOfCharts[j].series)
-
-                        // According to available kursus
-                        _.each(SAB.kursus, function(k, x) {
-
-                            // console.log('K ', k);
-
-                            blocksOfCharts[j].series[x].stack = angular.copy(k.kursus)
-                            // console.log('Chart ', blocksOfCharts[j].series[x].data);
-                            console.log('----------------------------------------');
+                            })
 
                         });
 
+                    }
+
+                });
+
+                _.each($scope.bahagianB, function(answer) {
+
+                    var chart = angular.copy(chartStructure);
+                    chart.title.text = answer.bahagian;
+                    chart.xAxis.categories = _.map(answer.kursus, 'kursus');
+
+                    chart.series = [{
+                        name: 'Sangat Perlu',
+                        data: []
+                    }, {
+                        name: 'Perlu',
+                        data: []
+                    }, {
+                        name: 'Tidak Perlu',
+                        data: []
+                    }];
+
+                    _.each(answer.kursus, function(kursus) {
+                        chart.series[0].data.push(kursus.totalSangatPerlu);
+                        chart.series[1].data.push(kursus.totalPerlu);
+                        chart.series[2].data.push(kursus.totalTidakPerlu);
                     });
 
-                    console.log('=============================================');
+                    $scope.chartsOption.push(chart);
 
                 })
 
-            }
-
-            function generateChart(element, question, categories, series) {
-
-                $(element).highcharts({
-                    chart: {
-                        type: 'column'
-                    },
-                    title: {
-                        text: question.title
-                    },
-                    subtitle: {
-                        text: question.sub
-                    },
-                    xAxis: {
-                        categories: categories,
-                        crosshair: true
-                    },
-                    yAxis: {
-                        min: 0,
-                        title: {
-                            text: 'Jumlah jawapan'
-                        }
-                    },
-                    credits: {
-                        enabled: false
-                    },
-                    tooltip: {
-                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                        '<td style="padding:0"><b>{point.y} jawapan</b></td></tr>',
-                        footerFormat: '</table>',
-                        shared: true,
-                        useHTML: true
-                    },
-                    plotOptions: {
-                        column: {
-                            pointPadding: 0.2,
-                            borderWidth: 0
-                        }
-                    },
-                    series: series
-                });
-
-            }
-
-            function generateChartStack(element, label, categories, series) {
-
-                $(element).highcharts({
-                    chart: {
-                        type: 'column'
-                    },
-                    title: {
-                        text: label
-                    },
-                    xAxis: {
-                        categories: categories
-                    },
-                    yAxis: {
-                        allowDecimals: false,
-                        min: 0,
-                        title: {
-                            text: 'Jumlah jawapan yang diberikan'
-                        },
-                        // stackLabels: {
-                        //     enabled: true,
-                        //     style: {
-                        //         fontWeight: 'bold',
-                        //         color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-                        //     }
-                        // }
-                    },
-                    tooltip: {
-                        headerFormat: '<b>{point.x}</b><br/>',
-                        pointFormat: '{series.name}: {point.y}<br/>Peratusan: {point.y:.0f}%'
-                    },
-                    plotOptions: {
-                        column: {
-                            stacking: 'normal',
-                            dataLabels: {
-                                enabled: true,
-                                color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
-                            }
-                        }
-                    },
-                    series: series
-                });
-
-            }
+            })
 
         }
     ]);

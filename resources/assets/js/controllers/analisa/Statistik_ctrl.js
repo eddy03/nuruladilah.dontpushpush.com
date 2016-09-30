@@ -216,6 +216,7 @@ angular.module('dylurp')
                         crosshair: true
                     },
                     yAxis: {
+                        allowDecimals: false,
                         min: 0,
                         title: {
                             text: 'Jumlah jawapan'

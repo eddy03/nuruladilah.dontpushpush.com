@@ -44,6 +44,8 @@ elixir(function(mix) {
             'lib/moment.js',
             'lib/Chart.min.js',
             'lib/angular-chart.min.js',
+            'lib/highcharts-ng.js',
+            'lib/lazyload.js',
             'lib/app.min.js',
             'App.js',
             'directive',

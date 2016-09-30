@@ -12976,6 +12976,582 @@ b[_type],e=/wn|up/.test(d)?t:v;if(!c[n]){if(d==_click)A(a,!1,!0);else{if(/wn|er|
 !function(t){"use strict";"object"==typeof exports?module.exports=t("undefined"!=typeof angular?angular:require("angular"),"undefined"!=typeof Chart?Chart:require("chart.js")):"function"==typeof define&&define.amd?define(["angular","chart"],t):t(angular,Chart)}(function(t,e){"use strict";function n(){var n={},r={Chart:e,getOptions:function(e){var r=e&&n[e]||{};return t.extend({},n,r)}};this.setOptions=function(e,r){return r?void(n[e]=t.extend(n[e]||{},r)):(r=e,void(n=t.extend(n,r)))},this.$get=function(){return r}}function r(n,r){function o(t,e){return t&&e&&t.length&&e.length?Array.isArray(t[0])?t.length===e.length&&t.every(function(t,n){return t.length===e[n].length}):e.reduce(i,0)>0?t.length===e.length:!1:!1}function i(t,e){return t+e}function c(e,n,r,a){var o=null;return function(i){var c=n.getPointsAtEvent||n.getBarsAtEvent||n.getSegmentsAtEvent;if(c){var l=c.call(n,i);(a===!1||t.equals(o,l)===!1)&&(o=l,e[r](l,i),e.$apply())}}}function l(r,a){for(var o=t.copy(a.colours||n.getOptions(r).colours||e.defaults.global.colours);o.length<a.data.length;)o.push(a.getColour());return o.map(u)}function u(t){return"object"==typeof t&&null!==t?t:"string"==typeof t&&"#"===t[0]?f(g(t.substr(1))):s()}function s(){var t=[h(0,255),h(0,255),h(0,255)];return f(t)}function f(t){return{fillColor:d(t,.2),strokeColor:d(t,1),pointColor:d(t,1),pointStrokeColor:"#fff",pointHighlightFill:"#fff",pointHighlightStroke:d(t,.8)}}function h(t,e){return Math.floor(Math.random()*(e-t+1))+t}function d(t,e){return a?"rgb("+t.join(",")+")":"rgba("+t.concat(e).join(",")+")"}function g(t){var e=parseInt(t,16),n=e>>16&255,r=e>>8&255,a=255&e;return[n,r,a]}function p(e,n,r,a){return{labels:e,datasets:n.map(function(e,n){return t.extend({},a[n],{label:r[n],data:e})})}}function v(e,n,r){return e.map(function(e,a){return t.extend({},r[a],{label:e,value:n[a],color:r[a].strokeColor,highlight:r[a].pointHighlightStroke})})}function y(t,e){var n=t.parent(),r=n.find("chart-legend"),a="<chart-legend>"+e.generateLegend()+"</chart-legend>";r.length?r.replaceWith(a):n.append(a)}function C(t,e,n,r){Array.isArray(n.data[0])?t.datasets.forEach(function(t,n){(t.points||t.bars).forEach(function(t,r){t.value=e[n][r]})}):t.segments.forEach(function(t,n){t.value=e[n]}),t.update(),n.$emit("update",t),n.legend&&"false"!==n.legend&&y(r,t)}function b(t){return!t||Array.isArray(t)&&!t.length||"object"==typeof t&&!Object.keys(t).length}function m(r,a){var o=t.extend({},e.defaults.global,n.getOptions(r),a.options);return o.responsive}return function(e){return{restrict:"CA",scope:{data:"=?",labels:"=?",options:"=?",series:"=?",colours:"=?",getColour:"=?",chartType:"=",legend:"@",click:"=?",hover:"=?",chartData:"=?",chartLabels:"=?",chartOptions:"=?",chartSeries:"=?",chartColours:"=?",chartLegend:"@",chartClick:"=?",chartHover:"=?"},link:function(i,u){function f(t,e){i.$watch(t,function(t){"undefined"!=typeof t&&(i[e]=t)})}function h(n,r){if(!b(n)&&!t.equals(n,r)){var a=e||i.chartType;a&&(w&&w.destroy(),d(a))}}function d(e){if(m(e,i)&&0===u[0].clientHeight&&0===A.clientHeight)return r(function(){d(e)},50,!1);if(i.data&&i.data.length){i.getColour="function"==typeof i.getColour?i.getColour:s,i.colours=l(e,i);var a=u[0],o=a.getContext("2d"),f=Array.isArray(i.data[0])?p(i.labels,i.data,i.series||[],i.colours):v(i.labels,i.data,i.colours),h=t.extend({},n.getOptions(e),i.options);w=new n.Chart(o)[e](f,h),i.$emit("create",w),a.onclick=i.click?c(i,w,"click",!1):t.noop,a.onmousemove=i.hover?c(i,w,"hover",!0):t.noop,i.legend&&"false"!==i.legend&&y(u,w)}}function g(t){if("undefined"!=typeof console&&"test"!==n.getOptions().env){var e="function"==typeof console.warn?console.warn:console.log;i[t]&&e.call(console,'"%s" is deprecated and will be removed in a future version. Please use "chart-%s" instead.',t,t)}}var w,A=document.createElement("div");A.className="chart-container",u.replaceWith(A),A.appendChild(u[0]),a&&window.G_vmlCanvasManager.initElement(u[0]),["data","labels","options","series","colours","legend","click","hover"].forEach(g),f("chartData","data"),f("chartLabels","labels"),f("chartOptions","options"),f("chartSeries","series"),f("chartColours","colours"),f("chartLegend","legend"),f("chartClick","click"),f("chartHover","hover"),i.$watch("data",function(t,n){if(t&&t.length&&(!Array.isArray(t[0])||t[0].length)){var r=e||i.chartType;if(r){if(w){if(o(t,n))return C(w,t,i,u);w.destroy()}d(r)}}},!0),i.$watch("series",h,!0),i.$watch("labels",h,!0),i.$watch("options",h,!0),i.$watch("colours",h,!0),i.$watch("chartType",function(e,n){b(e)||t.equals(e,n)||(w&&w.destroy(),d(e))}),i.$on("$destroy",function(){w&&w.destroy()})}}}}e.defaults.global.responsive=!0,e.defaults.global.multiTooltipTemplate="<%if (datasetLabel){%><%=datasetLabel%>: <%}%><%= value %>",e.defaults.global.colours=["#97BBCD","#DCDCDC","#F7464A","#46BFBD","#FDB45C","#949FB1","#4D5360"];var a="object"==typeof window.G_vmlCanvasManager&&null!==window.G_vmlCanvasManager&&"function"==typeof window.G_vmlCanvasManager.initElement;return a&&(e.defaults.global.animation=!1),t.module("chart.js",[]).provider("ChartJs",n).factory("ChartJsFactory",["ChartJs","$timeout",r]).directive("chartBase",["ChartJsFactory",function(t){return new t}]).directive("chartLine",["ChartJsFactory",function(t){return new t("Line")}]).directive("chartBar",["ChartJsFactory",function(t){return new t("Bar")}]).directive("chartRadar",["ChartJsFactory",function(t){return new t("Radar")}]).directive("chartDoughnut",["ChartJsFactory",function(t){return new t("Doughnut")}]).directive("chartPie",["ChartJsFactory",function(t){return new t("Pie")}]).directive("chartPolarArea",["ChartJsFactory",function(t){return new t("PolarArea")}])});
 //# sourceMappingURL=angular-chart.min.js.map
 
+/**
+ * highcharts-ng
+ * @version v0.0.12 - 2016-08-07
+ * @link https://github.com/pablojim/highcharts-ng
+ * @author Barry Fitzgerald <>
+ * @license MIT License, http://www.opensource.org/licenses/MIT
+ */
+
+if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.exports === exports){
+  module.exports = 'highcharts-ng';
+}
+
+(function () {
+  'use strict';
+  /*global angular: false, Highcharts: false */
+
+
+  angular.module('highcharts-ng', [])
+    .factory('highchartsNG', ['$q', '$window', highchartsNG])
+    .directive('highchart', ['highchartsNG', '$timeout', highchart]);
+
+  //IE8 support
+  function indexOf(arr, find, i /*opt*/) {
+    if (i === undefined) i = 0;
+    if (i < 0) i += arr.length;
+    if (i < 0) i = 0;
+    for (var n = arr.length; i < n; i++)
+      if (i in arr && arr[i] === find)
+        return i;
+    return -1;
+  }
+
+  function prependMethod(obj, method, func) {
+    var original = obj[method];
+    obj[method] = function () {
+      var args = Array.prototype.slice.call(arguments);
+      func.apply(this, args);
+      if (original) {
+        return original.apply(this, args);
+      } else {
+        return;
+      }
+
+    };
+  }
+
+  function deepExtend(destination, source) {
+    //Slightly strange behaviour in edge cases (e.g. passing in non objects)
+    //But does the job for current use cases.
+    if (angular.isArray(source)) {
+      destination = angular.isArray(destination) ? destination : [];
+      for (var i = 0; i < source.length; i++) {
+        destination[i] = deepExtend(destination[i] || {}, source[i]);
+      }
+    } else if (angular.isObject(source)) {
+      destination = angular.isObject(destination) ? destination : {};
+      for (var property in source) {
+        destination[property] = deepExtend(destination[property] || {}, source[property]);
+      }
+    } else {
+      destination = source;
+    }
+    return destination;
+  }
+
+  function highchartsNG($q, $window) {
+    var highchartsProm = $q.when($window.Highcharts);
+
+    function getHighchartsOnce() {
+      return highchartsProm;
+    }
+
+    return {
+      getHighcharts: getHighchartsOnce,
+      ready: function ready(callback, thisArg) {
+        getHighchartsOnce().then(function() {
+          callback.call(thisArg);
+        });
+      }
+    };
+  }
+
+  function highchart(highchartsNGUtils, $timeout) {
+
+    // acceptable shared state
+    var seriesId = 0;
+    var ensureIds = function (series) {
+      var changed = false;
+      angular.forEach(series, function(s) {
+        if (!angular.isDefined(s.id)) {
+          s.id = 'series-' + seriesId++;
+          changed = true;
+        }
+      });
+      return changed;
+    };
+
+    // immutable
+    var axisNames = [ 'xAxis', 'yAxis' ];
+    var chartTypeMap = {
+      'stock': 'StockChart',
+      'map':   'Map',
+      'chart': 'Chart'
+    };
+
+    var getMergedOptions = function (scope, element, config) {
+      var mergedOptions = {};
+
+      var defaultOptions = {
+        chart: {
+          events: {}
+        },
+        title: {},
+        subtitle: {},
+        series: [],
+        credits: {},
+        plotOptions: {},
+        navigator: {enabled: false},
+        xAxis: {
+          events: {}
+        },
+        yAxis: {
+          events: {}
+        }
+      };
+
+      if (config.options) {
+        mergedOptions = deepExtend(defaultOptions, config.options);
+      } else {
+        mergedOptions = defaultOptions;
+      }
+      mergedOptions.chart.renderTo = element[0];
+
+      angular.forEach(axisNames, function(axisName) {
+        if(angular.isDefined(config[axisName])) {
+          mergedOptions[axisName] = deepExtend(mergedOptions[axisName] || {}, config[axisName]);
+
+          if(angular.isDefined(config[axisName].currentMin) ||
+              angular.isDefined(config[axisName].currentMax)) {
+
+            prependMethod(mergedOptions.chart.events, 'selection', function(e){
+              var thisChart = this;
+              if (e[axisName]) {
+                scope.$apply(function () {
+                  scope.config[axisName].currentMin = e[axisName][0].min;
+                  scope.config[axisName].currentMax = e[axisName][0].max;
+                });
+              } else {
+                //handle reset button - zoom out to all
+                scope.$apply(function () {
+                  scope.config[axisName].currentMin = thisChart[axisName][0].dataMin;
+                  scope.config[axisName].currentMax = thisChart[axisName][0].dataMax;
+                });
+              }
+            });
+
+            prependMethod(mergedOptions.chart.events, 'addSeries', function(e){
+              scope.config[axisName].currentMin = this[axisName][0].min || scope.config[axisName].currentMin;
+              scope.config[axisName].currentMax = this[axisName][0].max || scope.config[axisName].currentMax;
+            });
+            prependMethod(mergedOptions[axisName].events, 'setExtremes', function (e) {
+              if (e.trigger && e.trigger !== 'zoom') { // zoom trigger is handled by selection event
+                $timeout(function () {
+                  scope.config[axisName].currentMin = e.min;
+                  scope.config[axisName].currentMax = e.max;
+                  scope.config[axisName].min = e.min; // set min and max to adjust scrollbar/navigator
+                  scope.config[axisName].max = e.max;
+                }, 0);
+              }
+            });
+          }
+        }
+      });
+
+      if(config.title) {
+        mergedOptions.title = config.title;
+      }
+      if (config.subtitle) {
+        mergedOptions.subtitle = config.subtitle;
+      }
+      if (config.credits) {
+        mergedOptions.credits = config.credits;
+      }
+      if(config.size) {
+        if (config.size.width) {
+          mergedOptions.chart.width = config.size.width;
+        }
+        if (config.size.height) {
+          mergedOptions.chart.height = config.size.height;
+        }
+      }
+      return mergedOptions;
+    };
+
+    var updateZoom = function (axis, modelAxis) {
+      var extremes = axis.getExtremes();
+      if(modelAxis.currentMin !== extremes.dataMin || modelAxis.currentMax !== extremes.dataMax) {
+        if (axis.setExtremes) {
+          axis.setExtremes(modelAxis.currentMin, modelAxis.currentMax, false);
+        } else {
+          axis.detachedsetExtremes(modelAxis.currentMin, modelAxis.currentMax, false);
+        }
+      }
+    };
+
+    var processExtremes = function(chart, axis, axisName) {
+      if(axis.currentMin || axis.currentMax) {
+        chart[axisName][0].setExtremes(axis.currentMin, axis.currentMax, true);
+      }
+    };
+
+    var chartOptionsWithoutEasyOptions = function (options) {
+      return angular.extend(
+        deepExtend({}, options),
+        { data: null, visible: null }
+      );
+    };
+
+    var getChartType = function(scope) {
+      if (scope.config === undefined) return 'Chart';
+      return chartTypeMap[('' + scope.config.chartType).toLowerCase()] ||
+             (scope.config.useHighStocks ? 'StockChart' : 'Chart');
+    };
+
+    function linkWithHighcharts(Highcharts, scope, element, attrs) {
+      // We keep some chart-specific variables here as a closure
+      // instead of storing them on 'scope'.
+
+      // prevSeriesOptions is maintained by processSeries
+      var prevSeriesOptions = {};
+      // chart is maintained by initChart
+      var chart = false;
+
+      var processSeries = function(series, seriesOld) {
+        var i;
+        var ids = [];
+
+        if(series) {
+          var setIds = ensureIds(series);
+          if(setIds && !scope.disableDataWatch) {
+            //If we have set some ids this will trigger another digest cycle.
+            //In this scenario just return early and let the next cycle take care of changes
+            return false;
+          }
+
+          //Find series to add or update
+          angular.forEach(series, function(s, idx) {
+            ids.push(s.id);
+            var chartSeries = chart.get(s.id);
+            if (chartSeries) {
+              if (!angular.equals(prevSeriesOptions[s.id], chartOptionsWithoutEasyOptions(s))) {
+                chartSeries.update(angular.copy(s), false);
+              } else {
+                if (s.visible !== undefined && chartSeries.visible !== s.visible) {
+                  chartSeries.setVisible(s.visible, false);
+                }
+                
+                // Make sure the current series index can be accessed in seriesOld
+                if (idx < seriesOld.length) {
+                  var sOld = seriesOld[idx];
+                  var sCopy = angular.copy(sOld);
+                  
+                  // Get the latest data point from the new series
+                  var ptNew = s.data[s.data.length - 1];
+                  
+                  // Check if the new and old series are identical with the latest data point added
+                  // If so, call addPoint without shifting
+                  sCopy.data.push(ptNew);
+                  if (angular.equals(sCopy, s)) {
+                    chartSeries.addPoint(ptNew, false);
+                  }
+                  
+                  // Check if the data change was a push and shift operation
+                  // If so, call addPoint WITH shifting
+                  else {
+                    sCopy.data.shift();
+                    if (angular.equals(sCopy, s)) {
+                      chartSeries.addPoint(ptNew, false, true);
+                    }
+                    else {
+                      chartSeries.setData(angular.copy(s.data), false);
+                    }
+                  }
+                }
+                else {
+                  chartSeries.setData(angular.copy(s.data), false);
+                }
+              }
+            } else {
+              chart.addSeries(angular.copy(s), false);
+            }
+            prevSeriesOptions[s.id] = chartOptionsWithoutEasyOptions(s);
+          });
+
+          //  Shows no data text if all series are empty
+          if(scope.config.noData) {
+            var chartContainsData = false;
+
+            for(i = 0; i < series.length; i++) {
+              if (series[i].data && series[i].data.length > 0) {
+                chartContainsData = true;
+
+                break;
+              }
+            }
+
+            if (!chartContainsData) {
+              chart.showLoading(scope.config.noData);
+            } else {
+              chart.hideLoading();
+            }
+          }
+        }
+
+        //Now remove any missing series
+        for(i = chart.series.length - 1; i >= 0; i--) {
+          var s = chart.series[i];
+          if (s.options.id !== 'highcharts-navigator-series' && indexOf(ids, s.options.id) < 0) {
+            s.remove(false);
+          }
+        }
+
+        return true;
+      };
+
+      var initChart = function() {
+        if (chart) chart.destroy();
+        prevSeriesOptions = {};
+        var config = scope.config || {};
+        var mergedOptions = getMergedOptions(scope, element, config);
+        var func = config.func || undefined;
+        var chartType = getChartType(scope);
+
+        chart = new Highcharts[chartType](mergedOptions, func);
+
+        for (var i = 0; i < axisNames.length; i++) {
+          if (config[axisNames[i]]) {
+            processExtremes(chart, config[axisNames[i]], axisNames[i]);
+          }
+        }
+        if(config.loading) {
+          chart.showLoading();
+        }
+        config.getHighcharts = function() {
+          return chart;
+        };
+
+      };
+      initChart();
+
+
+      if(scope.disableDataWatch){
+        scope.$watchCollection('config.series', function (newSeries, oldSeries) {
+          processSeries(newSeries);
+          chart.redraw();
+        });
+      } else {
+        scope.$watch('config.series', function (newSeries, oldSeries) {
+          var needsRedraw = processSeries(newSeries, oldSeries);
+          if(needsRedraw) {
+            chart.redraw();
+          }
+        }, true);
+      }
+
+      scope.$watch('config.title', function (newTitle) {
+        chart.setTitle(newTitle, true);
+      }, true);
+
+      scope.$watch('config.subtitle', function (newSubtitle) {
+        chart.setTitle(true, newSubtitle);
+      }, true);
+
+      scope.$watch('config.loading', function (loading) {
+        if(loading) {
+          chart.showLoading(loading === true ? null : loading);
+        } else {
+          chart.hideLoading();
+        }
+      });
+      scope.$watch('config.noData', function (noData) {
+        if(scope.config && scope.config.loading) {
+          chart.showLoading(noData);
+        }
+      }, true);
+
+      scope.$watch('config.credits.enabled', function (enabled) {
+        if (enabled) {
+          chart.credits.show();
+        } else if (chart.credits) {
+          chart.credits.hide();
+        }
+      });
+
+      scope.$watch(getChartType, function (chartType, oldChartType) {
+        if (chartType === oldChartType) return;
+        initChart();
+      });
+
+      angular.forEach(axisNames, function(axisName) {
+        scope.$watch('config.' + axisName, function(newAxes) {
+          if (!newAxes) {
+            return;
+          }
+
+          if (angular.isArray(newAxes)) {
+
+            for (var axisIndex = 0; axisIndex < newAxes.length; axisIndex++) {
+              var axis = newAxes[axisIndex];
+
+              if (axisIndex < chart[axisName].length) {
+                chart[axisName][axisIndex].update(axis, false);
+                updateZoom(chart[axisName][axisIndex], angular.copy(axis));
+              }
+
+            }
+
+          } else {
+            // update single axis
+            chart[axisName][0].update(newAxes, false);
+            updateZoom(chart[axisName][0], angular.copy(newAxes));
+          }
+
+          chart.redraw();
+        }, true);
+      });
+      scope.$watch('config.options', function (newOptions, oldOptions, scope) {
+        //do nothing when called on registration
+        if (newOptions === oldOptions) return;
+        initChart();
+        processSeries(scope.config.series);
+        chart.redraw();
+      }, true);
+
+      scope.$watch('config.size', function (newSize, oldSize) {
+        if(newSize === oldSize) return;
+        if(newSize) {
+          chart.setSize(newSize.width || chart.chartWidth, newSize.height || chart.chartHeight);
+        }
+      }, true);
+
+      scope.$on('highchartsng.reflow', function () {
+        chart.reflow();
+      });
+
+      scope.$on('$destroy', function() {
+        if (chart) {
+          try{
+            chart.destroy();
+          }catch(ex){
+            // fail silently as highcharts will throw exception if element doesn't exist
+          }
+
+          $timeout(function(){
+            element.remove();
+          }, 0);
+        }
+      });
+    }
+
+    function link(scope, element, attrs) {
+      function highchartsCb(Highcarts) {
+        linkWithHighcharts(Highcharts, scope, element, attrs);
+      }
+      highchartsNGUtils
+        .getHighcharts()
+        .then(highchartsCb);
+    }
+
+    return {
+      restrict: 'EAC',
+      replace: true,
+      template: '<div></div>',
+      scope: {
+        config: '=',
+        disableDataWatch: '='
+      },
+      link: link
+    };
+  }
+}());
+
+/**
+ * highcharts-ng
+ * @version v0.0.12 - 2016-08-07
+ * @link https://github.com/pablojim/highcharts-ng
+ * @author Barry Fitzgerald <>
+ * @license MIT License, http://www.opensource.org/licenses/MIT
+ */
+
+(function () {
+  'use strict';
+  /*global angular: false, Highcharts: false */
+  var MODULE_NAME = 'highcharts-ng-lazyload';
+  if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.exports === exports){
+    module.exports = MODULE_NAME;
+  }
+
+
+  angular.module(MODULE_NAME, ['highcharts-ng'])
+    .provider('highchartsNG', highchartsNGProvider);
+
+  function highchartsNGProvider(){
+    var modules = [];
+    var basePath = false;
+    var lazyLoad = false;
+    return {
+      HIGHCHART: 'highcharts.js',
+      HIGHSTOCK: 'stock/highstock.js',
+      basePath: function (p) {
+        basePath = p;
+      },
+      lazyLoad: function (list) {
+        if (list === undefined) {
+          modules = [this.HIGHCHART];
+        } else {
+          modules = list;
+        }
+        lazyLoad = true;
+      },
+      $get: ['$q', '$window', function ($q, $window) {
+        if (!basePath) {
+          basePath = (window.location.protocol === 'https:' ? 'https' : 'http') + '://code.highcharts.com/';
+        }
+        return highchartsNG($q, $window, basePath, modules);
+      }]
+    };
+  }
+
+  function highchartsNG($q, $window, basePath, modules) {
+    var highchartsProm;
+
+    function loadScript(path) {
+      return $q(function(resolve){
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.src = path;
+        s.onload = resolve;
+        document.getElementsByTagName('body')[0].appendChild(s);
+      });
+    }
+
+    function getHighcharts() {
+      if (typeof $window.Highcharts !== 'undefined') {
+        return $q.when($window.Highcharts);
+      }
+      var prom = $q.when();
+      angular.forEach(modules, function(s) {
+        prom = prom.then(function() {
+          return loadScript(basePath + s);
+        });
+      });
+
+      return prom.then(function() {
+        return $window.Highcharts;
+      });
+    }
+
+    function getHighchartsOnce() {
+      if(!highchartsProm) {
+        highchartsProm = getHighcharts();
+      }
+      return highchartsProm;
+    }
+
+    return {
+      getHighcharts: getHighchartsOnce,
+      ready: function ready(callback, thisArg) {
+        getHighchartsOnce().then(function() {
+          callback.call(thisArg);
+        });
+      }
+    };
+  }
+}());
+
 /*! AdminLTE app.js
  * ================
  * Main JS application file for AdminLTE v2. This file
@@ -12996,7 +13572,8 @@ var apps = angular.module('dylurp', [
     'ngResource',
     'ui.bootstrap',
     'blockUI',
-    'chart.js'
+    'chart.js',
+    'highcharts-ng'
 ]);
 
 apps.config(['$routeProvider', '$httpProvider', 'blockUIConfig', function($routeProvider, $httpProvider, blockUIConfig) {
@@ -13029,11 +13606,11 @@ apps.config(['$routeProvider', '$httpProvider', 'blockUIConfig', function($route
             templateUrl: 'html/analisa/senarai.html',
             controller: 'SenaraiAnalisaLatihan'
         })
-        .when('/analisa/statistik', {
+        .when('/statistika', {
             templateUrl: 'html/analisa/statistik.html',
             controller: 'AnalisaStatistik'
         })
-        .when('/analisa/statistikb', {
+        .when('/statistikb', {
             templateUrl: 'html/analisa/statistik_b.html',
             controller: 'AnalisaStatistikB'
         })
@@ -13525,8 +14102,60 @@ angular.module('dylurp')
         'BahagianModel',
         function($scope, $http, AnalisaLatihanModel, BahagianModel) {
 
+            var setJawapanBahagianB = null;
             var seriesAll = [];
             $scope.allData = [];
+            $scope.bahagianB = [];
+            $scope.bahagianBDefault = null;
+            $scope.listOfBahagian = null;
+            $scope.selectedBahagian = null;
+            $scope.chartsOption = [];
+            $scope.listOfAnalisa = [];
+
+            var chartStructure = {
+                options: {
+                    chart: {
+                        type: 'column'
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y} jawapan</b></td></tr>',
+                        footerFormat: '</table>',
+                        shared: true,
+                        useHTML: true
+                    }
+                },
+                title: {
+                    text: 'Hello'
+                },
+                xAxis: {
+                    categories: [],
+                    crosshair: true,
+                    title: {
+                        text: 'Sub bahagian kursus'
+                    }
+                },
+                yAxis: {
+                    allowDecimals: false,
+                    min: 0,
+                    title: {
+                        text: 'Jumlah jawapan'
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                    }
+                },
+                useHighStocks: false,
+                series: [],
+                //function (optional)
+                func: function (chart) {
+                    //setup some logic for the chart
+                }
+            };
 
             init();
 
@@ -13535,9 +14164,8 @@ angular.module('dylurp')
                 $http.get('API/v1/latihan/analisa/soalan', {})
                     .then(function(results) {
 
-                        var setJawapanBahagianB = angular.copy(results.data.soalanBhgB);
-
-                        _.each(setJawapanBahagianB, function(bhg) {
+                        $scope.bahagianB = angular.copy(results.data.soalanBhgB);
+                        _.each($scope.bahagianB, function(bhg) {
                             _.each(bhg.kursus, function(k) {
                                 k.totalSangatPerlu = 0;
                                 k.totalPerlu = 0;
@@ -13545,97 +14173,17 @@ angular.module('dylurp')
                             });
                         });
 
-                        var setJawapanBahagianASoalan2 = _.find(results.data.soalanBhgA, {id: 2}).set_jawapan;
-                        _.each(setJawapanBahagianASoalan2, function(o) {
-                            o.total = 0;
-                        });
+                        $scope.bahagianBDefault = angular.copy($scope.bahagianB);
 
                         BahagianModel.query({}, function(responseBahagian) {
 
-                            seriesAll = responseBahagian;
-
-                            // Init results object
-                            _.each(seriesAll, function(rb) {
-                                rb.bahagianA = {
-                                    soalan1: {ya: 0, tidak: 0},
-                                    soalan2: angular.copy(setJawapanBahagianASoalan2),
-                                    soalan3: {ya: 0, tidak: 0},
-                                    soalan4: {less: 0, more: 0},
-                                }
-                                rb.bahagianB = angular.copy(setJawapanBahagianB);
-                            });
+                            $scope.listOfBahagian = angular.copy(responseBahagian);
 
                             AnalisaLatihanModel.query({}, function(responseAnalisa) {
 
-                                _.each(responseAnalisa, function(analisa) {
+                                $scope.listOfAnalisa = angular.copy(responseAnalisa);
 
-                                    var RBIndex = _.findIndex(seriesAll, function(o) {
-                                        return o.id == analisa.bahagian_id
-                                    });
-
-                                    _.each(analisa.jawapan_bhg_a, function(ja) {
-
-                                        if(ja.soalan_analisa_bhg_a_id == 1) {
-                                            if(ja.jawapan == 1) {
-                                                seriesAll[RBIndex].bahagianA.soalan1.ya++;
-                                            } else {
-                                                seriesAll[RBIndex].bahagianA.soalan1.tidak++;
-                                            }
-                                        } else if(ja.soalan_analisa_bhg_a_id == 3) {
-                                            if(ja.jawapan == 1) {
-                                                seriesAll[RBIndex].bahagianA.soalan3.ya++;
-                                            } else {
-                                                seriesAll[RBIndex].bahagianA.soalan3.tidak++;
-                                            }
-                                        } else if(ja.soalan_analisa_bhg_a_id == 4) {
-                                            if(ja.jawapan == 1) {
-                                                seriesAll[RBIndex].bahagianA.soalan4.less++;
-                                            } else {
-                                                seriesAll[RBIndex].bahagianA.soalan4.more++;
-                                            }
-                                        } else if(ja.soalan_analisa_bhg_a_id == null) {
-
-                                            if(ja.jawapan == 1) {
-                                                var S2Index = _.findIndex(seriesAll[RBIndex].bahagianA.soalan2, function(o) {
-                                                    return o.id == ja.set_jawapan_soalan_analisa_bhg_a_id
-                                                });
-                                                seriesAll[RBIndex].bahagianA.soalan2[S2Index].total++;
-                                            }
-                                        }
-                                    });
-
-                                    _.each(analisa.jawapan_bhg_b, function(jb) {
-
-                                        var akb = jb.analisa_kursus_bahagian_b_id;
-                                        var indexOfSection = -1;
-                                        var indexOfKursus = -1;
-
-                                        _.each(seriesAll[RBIndex].bahagianB, function(questionSection, i) {
-
-                                            var indexOfKursusInside = _.findIndex(questionSection.kursus, function(k) {
-                                                return k.id == akb;
-                                            });
-
-                                            if(indexOfKursusInside != -1) {
-                                                indexOfSection = i;
-                                                indexOfKursus = angular.copy(indexOfKursusInside);
-                                            }
-
-                                        });
-
-                                        if(jb.jawapan == 1) {
-                                            seriesAll[RBIndex].bahagianB[indexOfSection].kursus[indexOfKursus].totalSangatPerlu++;
-                                        } else if(jb.jawapan == 2) {
-                                            seriesAll[RBIndex].bahagianB[indexOfSection].kursus[indexOfKursus].totalPerlu++;
-                                        } else if(jb.jawapan == 3) {
-                                            seriesAll[RBIndex].bahagianB[indexOfSection].kursus[indexOfKursus].totalTidakPerlu++;
-                                        }
-
-                                    });
-
-                                });
-
-                                question1Generate();
+                                $scope.selectedBahagian = '1';
 
                             }, function(err) {
                                 console.error(err);
@@ -13651,255 +14199,70 @@ angular.module('dylurp')
 
             }
 
-            function question1Generate() {
-                var series = [];
-                var label = [];
-                var categories = _.map(seriesAll, 'nama');
+            $scope.$watch('selectedBahagian', function(b) {
 
-                label.push({
-                    title: 'Soalan 1',
-                    sub: 'Pada pendapat anda, adakah organisasi anda menyediakan peluang untuk meningkatkan pengetahuan dan kemahiran anda dalam bidang utama kerja?'
-                });
-                series.push({
-                    data: [{
-                        name: 'Ya',
-                        data: []
-                    }, {
-                        name: 'Tidak',
-                        data: []
-                    }]
-                });
+                $scope.chartsOption = [];
+                $scope.bahagianB = angular.copy($scope.bahagianBDefault);
 
-                label.push({
-                    title: 'Soalan 2',
-                    sub: 'Pada pendapat anda, apakah metodologi/kaedah latihan yang lebih berkesan untuk meningkatkan kualiti kerja anda?'
-                });
-                series.push({
-                    data: [{
-                        name: 'Seminar',
-                        data: []
-                    }, {
-                        name: 'Ceramah',
-                        data: []
-                    }, {
-                        name: 'Bengkel',
-                        data: []
-                    }, {
-                        name: 'Amali/Latih Amal',
-                        data: []
-                    }]
-                });
+                // Todo : this can be improve, but hey...there is nothing need to be improve
+                _.each($scope.listOfAnalisa, function(analisa) {
 
-                label.push({
-                    title: 'Soalan 3',
-                    sub: 'Bolehkah kursus/latihan yang disediakan dan dihadiri membantu meningkatkan kecekapan kerja/tugasan anda?'
-                });
-                series.push({
-                    data: [{
-                        name: 'Ya',
-                        data: []
-                    }, {
-                        name: 'Tidak',
-                        data: []
-                    }]
-                });
+                    if(analisa.bahagian_id == b) {
 
-                label.push({
-                    title: 'Soalan 4',
-                    sub: 'Secara amnya, berapa lamakah anda sanggup menghadiri sesuatu kursus/latihan?'
-                });
-                series.push({
-                    data: [{
-                        name: 'Kurang 3 hari',
-                        data: []
-                    }, {
-                        name: 'Lebih 3 hari',
-                        data: []
-                    }]
-                });
+                        _.each(analisa.jawapan_bhg_b, function(jwpB) {
 
-                _.each(seriesAll, function(ad) {
+                            _.each($scope.bahagianB, function(charData) {
 
-                    series[0].data[0].data.push(ad.bahagianA.soalan1.ya);
-                    series[0].data[1].data.push(ad.bahagianA.soalan1.tidak);
+                                var index = _.findIndex(charData.kursus, {id: jwpB.analisa_kursus_bahagian_b_id});
 
-                    series[1].data[0].data.push(ad.bahagianA.soalan2[0].total);
-                    series[1].data[1].data.push(ad.bahagianA.soalan2[1].total);
-                    series[1].data[2].data.push(ad.bahagianA.soalan2[2].total);
-                    series[1].data[3].data.push(ad.bahagianA.soalan2[3].total);
+                                if(index != -1) {
 
-                    series[2].data[0].data.push(ad.bahagianA.soalan3.ya);
-                    series[2].data[1].data.push(ad.bahagianA.soalan3.tidak);
+                                    if(jwpB.jawapan == 1) {
+                                        charData.kursus[index].totalSangatPerlu++;
+                                    } else if(jwpB.jawapan == 2) {
+                                        charData.kursus[index].totalPerlu++;
+                                    } else if(jwpB.jawapan == 3) {
+                                        charData.kursus[index].totalTidakPerlu++;
+                                    }
 
-                    series[3].data[0].data.push(ad.bahagianA.soalan4.less);
-                    series[3].data[1].data.push(ad.bahagianA.soalan4.more);
+                                }
 
-                });
-
-                generateChart('#chart11', label[0], categories, series[0].data);
-                generateChart('#chart12', label[1], categories, series[1].data);
-                generateChart('#chart13', label[2], categories, series[2].data);
-                generateChart('#chart14', label[3], categories, series[3].data);
-
-                // generateChart('#chart11', {
-                //     title: 'Soalan 1',
-                //     sub: 'Pada pendapat anda, adakah organisasi anda menyediakan peluang untuk meningkatkan pengetahuan dan kemahiran anda dalam bidang utama kerja?'
-                // }, {
-                //     name: 'Jawapan',
-                //     colorByPoint: true,
-                //     data: [{
-                //         name: 'Ya',
-                //         y: 56.33
-                //     }, {
-                //         name: 'Tidak',
-                //         y: 24.03
-                //     }]
-                // });
-
-            }
-
-            function question2Generate() {
-
-                var categories = _.map(seriesAll, 'nama');
-                var blocksOfCharts = [];
-
-                _.each(seriesAll[0].bahagianB, function(b, i) {
-
-                    var SeriesStructure = [];
-                    _.each(b.kursus, function(K) {
-                        SeriesStructure.push({
-                            name: K.kursus,
-                            data: [],
-                            stack: null
-                        });
-                    });
-
-                    blocksOfCharts.push({
-                        id: angular.copy(b.id),
-                        el: 'chart2'+ (i+1).toString(),
-                        categories: angular.copy(categories),
-                        label: angular.copy(b.bahagian),
-                        series: angular.copy(SeriesStructure)
-                    });
-
-                });
-
-                console.log('Blocks Of Charts ', blocksOfCharts);
-
-                // According to department
-                _.each(seriesAll, function(SA, i) {
-
-                    // According to question section
-                    _.each(SA.bahagianB, function(SAB, j) {
-
-                        console.log(blocksOfCharts[j].series)
-
-                        // According to available kursus
-                        _.each(SAB.kursus, function(k, x) {
-
-                            // console.log('K ', k);
-
-                            blocksOfCharts[j].series[x].stack = angular.copy(k.kursus)
-                            // console.log('Chart ', blocksOfCharts[j].series[x].data);
-                            console.log('----------------------------------------');
+                            })
 
                         });
 
+                    }
+
+                });
+
+                _.each($scope.bahagianB, function(answer) {
+
+                    var chart = angular.copy(chartStructure);
+                    chart.title.text = answer.bahagian;
+                    chart.xAxis.categories = _.map(answer.kursus, 'kursus');
+
+                    chart.series = [{
+                        name: 'Sangat Perlu',
+                        data: []
+                    }, {
+                        name: 'Perlu',
+                        data: []
+                    }, {
+                        name: 'Tidak Perlu',
+                        data: []
+                    }];
+
+                    _.each(answer.kursus, function(kursus) {
+                        chart.series[0].data.push(kursus.totalSangatPerlu);
+                        chart.series[1].data.push(kursus.totalPerlu);
+                        chart.series[2].data.push(kursus.totalTidakPerlu);
                     });
 
-                    console.log('=============================================');
+                    $scope.chartsOption.push(chart);
 
                 })
 
-            }
-
-            function generateChart(element, question, categories, series) {
-
-                $(element).highcharts({
-                    chart: {
-                        type: 'column'
-                    },
-                    title: {
-                        text: question.title
-                    },
-                    subtitle: {
-                        text: question.sub
-                    },
-                    xAxis: {
-                        categories: categories,
-                        crosshair: true
-                    },
-                    yAxis: {
-                        min: 0,
-                        title: {
-                            text: 'Jumlah jawapan'
-                        }
-                    },
-                    credits: {
-                        enabled: false
-                    },
-                    tooltip: {
-                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                        '<td style="padding:0"><b>{point.y} jawapan</b></td></tr>',
-                        footerFormat: '</table>',
-                        shared: true,
-                        useHTML: true
-                    },
-                    plotOptions: {
-                        column: {
-                            pointPadding: 0.2,
-                            borderWidth: 0
-                        }
-                    },
-                    series: series
-                });
-
-            }
-
-            function generateChartStack(element, label, categories, series) {
-
-                $(element).highcharts({
-                    chart: {
-                        type: 'column'
-                    },
-                    title: {
-                        text: label
-                    },
-                    xAxis: {
-                        categories: categories
-                    },
-                    yAxis: {
-                        allowDecimals: false,
-                        min: 0,
-                        title: {
-                            text: 'Jumlah jawapan yang diberikan'
-                        },
-                        // stackLabels: {
-                        //     enabled: true,
-                        //     style: {
-                        //         fontWeight: 'bold',
-                        //         color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-                        //     }
-                        // }
-                    },
-                    tooltip: {
-                        headerFormat: '<b>{point.x}</b><br/>',
-                        pointFormat: '{series.name}: {point.y}<br/>Peratusan: {point.y:.0f}%'
-                    },
-                    plotOptions: {
-                        column: {
-                            stacking: 'normal',
-                            dataLabels: {
-                                enabled: true,
-                                color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
-                            }
-                        }
-                    },
-                    series: series
-                });
-
-            }
+            })
 
         }
     ]);
@@ -14121,6 +14484,7 @@ angular.module('dylurp')
                         crosshair: true
                     },
                     yAxis: {
+                        allowDecimals: false,
                         min: 0,
                         title: {
                             text: 'Jumlah jawapan'
