@@ -42,7 +42,7 @@
 </div><!-- ./wrapper -->
 
 <!-- Application code -->
-<script src="{{ elixir('js/app.js') }}"></script>
+<script src="{{ elixir('js/app.js?cb=1') }}"></script>
 <script>
     $(function () {
         $('input').iCheck({
