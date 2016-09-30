@@ -21,6 +21,12 @@ angular.module('dylurp')
                     chart: {
                         type: 'column'
                     },
+                    plotOptions: {
+                        column: {
+                            pointPadding: 0.2,
+                            borderWidth: 0
+                        }
+                    },
                     tooltip: {
                         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                         pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
@@ -45,12 +51,6 @@ angular.module('dylurp')
                     min: 0,
                     title: {
                         text: 'Jumlah jawapan'
-                    }
-                },
-                plotOptions: {
-                    column: {
-                        pointPadding: 0.2,
-                        borderWidth: 0
                     }
                 },
                 useHighStocks: false,

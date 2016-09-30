@@ -39,6 +39,10 @@ apps.config(['$routeProvider', '$httpProvider', 'blockUIConfig', function($route
             templateUrl: 'html/analisa/senarai.html',
             controller: 'SenaraiAnalisaLatihan'
         })
+        .when('/statistikk', {
+            templateUrl: 'html/analisa/statistik_k.html',
+            controller: 'AnalisaStatistikk'
+        })
         .when('/statistika', {
             templateUrl: 'html/analisa/statistik.html',
             controller: 'AnalisaStatistik'
