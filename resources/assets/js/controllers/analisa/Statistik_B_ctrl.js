@@ -1,5 +1,5 @@
 angular.module('dylurp')
-    .controller('AnalisaStatistik', [
+    .controller('AnalisaStatistikB', [
         '$scope',
         '$http',
         'AnalisaLatihanModel',
@@ -15,6 +15,16 @@ angular.module('dylurp')
 
                 $http.get('API/v1/latihan/analisa/soalan', {})
                     .then(function(results) {
+
+                        var setJawapanBahagianB = angular.copy(results.data.soalanBhgB);
+
+                        _.each(setJawapanBahagianB, function(bhg) {
+                            _.each(bhg.kursus, function(k) {
+                                k.totalSangatPerlu = 0;
+                                k.totalPerlu = 0;
+                                k.totalTidakPerlu = 0;
+                            });
+                        });
 
                         var setJawapanBahagianASoalan2 = _.find(results.data.soalanBhgA, {id: 2}).set_jawapan;
                         _.each(setJawapanBahagianASoalan2, function(o) {
@@ -33,6 +43,7 @@ angular.module('dylurp')
                                     soalan3: {ya: 0, tidak: 0},
                                     soalan4: {less: 0, more: 0},
                                 }
+                                rb.bahagianB = angular.copy(setJawapanBahagianB);
                             });
 
                             AnalisaLatihanModel.query({}, function(responseAnalisa) {
@@ -72,6 +83,35 @@ angular.module('dylurp')
                                                 seriesAll[RBIndex].bahagianA.soalan2[S2Index].total++;
                                             }
                                         }
+                                    });
+
+                                    _.each(analisa.jawapan_bhg_b, function(jb) {
+
+                                        var akb = jb.analisa_kursus_bahagian_b_id;
+                                        var indexOfSection = -1;
+                                        var indexOfKursus = -1;
+
+                                        _.each(seriesAll[RBIndex].bahagianB, function(questionSection, i) {
+
+                                            var indexOfKursusInside = _.findIndex(questionSection.kursus, function(k) {
+                                                return k.id == akb;
+                                            });
+
+                                            if(indexOfKursusInside != -1) {
+                                                indexOfSection = i;
+                                                indexOfKursus = angular.copy(indexOfKursusInside);
+                                            }
+
+                                        });
+
+                                        if(jb.jawapan == 1) {
+                                            seriesAll[RBIndex].bahagianB[indexOfSection].kursus[indexOfKursus].totalSangatPerlu++;
+                                        } else if(jb.jawapan == 2) {
+                                            seriesAll[RBIndex].bahagianB[indexOfSection].kursus[indexOfKursus].totalPerlu++;
+                                        } else if(jb.jawapan == 3) {
+                                            seriesAll[RBIndex].bahagianB[indexOfSection].kursus[indexOfKursus].totalTidakPerlu++;
+                                        }
+
                                     });
 
                                 });
@@ -199,6 +239,61 @@ angular.module('dylurp')
 
             }
 
+            function question2Generate() {
+
+                var categories = _.map(seriesAll, 'nama');
+                var blocksOfCharts = [];
+
+                _.each(seriesAll[0].bahagianB, function(b, i) {
+
+                    var SeriesStructure = [];
+                    _.each(b.kursus, function(K) {
+                        SeriesStructure.push({
+                            name: K.kursus,
+                            data: [],
+                            stack: null
+                        });
+                    });
+
+                    blocksOfCharts.push({
+                        id: angular.copy(b.id),
+                        el: 'chart2'+ (i+1).toString(),
+                        categories: angular.copy(categories),
+                        label: angular.copy(b.bahagian),
+                        series: angular.copy(SeriesStructure)
+                    });
+
+                });
+
+                console.log('Blocks Of Charts ', blocksOfCharts);
+
+                // According to department
+                _.each(seriesAll, function(SA, i) {
+
+                    // According to question section
+                    _.each(SA.bahagianB, function(SAB, j) {
+
+                        console.log(blocksOfCharts[j].series)
+
+                        // According to available kursus
+                        _.each(SAB.kursus, function(k, x) {
+
+                            // console.log('K ', k);
+
+                            blocksOfCharts[j].series[x].stack = angular.copy(k.kursus)
+                            // console.log('Chart ', blocksOfCharts[j].series[x].data);
+                            console.log('----------------------------------------');
+
+                        });
+
+                    });
+
+                    console.log('=============================================');
+
+                })
+
+            }
+
             function generateChart(element, question, categories, series) {
 
                 $(element).highcharts({
@@ -243,4 +338,49 @@ angular.module('dylurp')
 
             }
 
-        }]);
+            function generateChartStack(element, label, categories, series) {
+
+                $(element).highcharts({
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: label
+                    },
+                    xAxis: {
+                        categories: categories
+                    },
+                    yAxis: {
+                        allowDecimals: false,
+                        min: 0,
+                        title: {
+                            text: 'Jumlah jawapan yang diberikan'
+                        },
+                        // stackLabels: {
+                        //     enabled: true,
+                        //     style: {
+                        //         fontWeight: 'bold',
+                        //         color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                        //     }
+                        // }
+                    },
+                    tooltip: {
+                        headerFormat: '<b>{point.x}</b><br/>',
+                        pointFormat: '{series.name}: {point.y}<br/>Peratusan: {point.y:.0f}%'
+                    },
+                    plotOptions: {
+                        column: {
+                            stacking: 'normal',
+                            dataLabels: {
+                                enabled: true,
+                                color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                            }
+                        }
+                    },
+                    series: series
+                });
+
+            }
+
+        }
+    ]);
