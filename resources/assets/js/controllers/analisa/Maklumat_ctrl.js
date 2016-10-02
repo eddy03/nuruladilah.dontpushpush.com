@@ -59,6 +59,9 @@ angular.module('dylurp')
                                 $scope.info.show = true;
                                 $scope.info.class = 'success';
                                 $scope.info.msg = 'Maklumat analisa telah dikemaskini';
+
+                                generateChart($scope.form.anggota, $scope.form.kompetensi);
+
                             } else {
                                 $scope.info.show = true;
                                 $scope.info.class = 'danger';
@@ -183,6 +186,8 @@ angular.module('dylurp')
                                     });
                                 });
 
+                                generateChart(response, $scope.form.kompetensi);
+
                             }, function(error) {
                                 console.error(error);
                             });
@@ -194,5 +199,78 @@ angular.module('dylurp')
                     })
 
             })();
+
+            $scope.reDraw = redrawChart;
+
+            var generateChart = function(response, kompetensi) {
+
+                var xAxis = _.map(kompetensi, 'soalan');
+                var tkanda = [];
+                var tkpenyelia = [];
+                var tkkanda = [];
+                var tkkpenyelia = [];
+
+                _.each(kompetensi, function(k) {
+                    tkanda.push(k.kebolehan.anda);
+                    tkpenyelia.push(k.kebolehan.penyelia);
+                    tkkanda.push(k.keperluan.anda);
+                    tkkpenyelia.push(k.keperluan.penyelia);
+                });
+
+                $('#chart').highcharts({
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Analisa Kompetensi bagi ' + response.nama
+                    },
+                    subtitle: {
+                        text: 'Bahagian ' + _.find($scope.senaraiBahagian, function(o) { return o.id = response.bahagian_id }).nama + ', Jawatan ' + response.jawatan
+                    },
+                    xAxis: {
+                        categories: xAxis
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Keputusan'
+                        }
+                    },
+                    tooltip: {
+                        enabled: false
+                    },
+                    plotOptions: {
+                        column: {
+                            pointPadding: 0.2,
+                            borderWidth: 0
+                        }
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: [{
+                        name: 'Tahap Kebolehan (anda)',
+                        data: tkanda
+                    }, {
+                        name: 'Tahap Kebolehan (penyelia)',
+                        data: tkpenyelia
+                    }, {
+                        name: 'Tahap Keperluan Kerja (anda)',
+                        data: tkkanda
+                    }, {
+                        name: 'Tahap Keperluan Kerja (penyelia)',
+                        data: tkkpenyelia
+                    }]
+                });
+
+                redrawChart();
+
+            }
+
+            function redrawChart() {
+                setTimeout(function() {
+                    $('#chart').highcharts().reflow();
+                }, 200);
+            }
 
         }]);
