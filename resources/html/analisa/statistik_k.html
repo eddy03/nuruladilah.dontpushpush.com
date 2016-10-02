@@ -18,8 +18,18 @@
 
             <strong>Sila pilih bahagian terlebih dahulu</strong>
             <select name="section" id="section" ng-model="selectedBahagian" class="form-control">
+                <option value="0">Semua Bahagian</option>
                 <option ng-repeat="section in listOfBahagian" value="{{ section.id }}">{{ section.nama }}</option>
             </select>
+
+            <hr>
+
+            <div class="text-right">
+                KBA - KeBolehan Anda<br />
+                KBP - KeBolehan Penyelia<br />
+                KPKA - KePerluan Kerja Anda<br />
+                KPKP - KePerluan Kerja Penyelia
+            </div>
 
             <hr>
 
