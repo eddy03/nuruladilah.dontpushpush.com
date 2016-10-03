@@ -18,6 +18,7 @@
 
             <strong>Sila pilih bahagian terlebih dahulu</strong>
             <select name="section" id="section" ng-model="selectedBahagian" class="form-control">
+                <option value="0">Semua bahagian</option>
                 <option ng-repeat="section in listOfBahagian" value="{{ section.id }}">{{ section.nama }}</option>
             </select>
 

@@ -14099,593 +14099,861 @@ angular.module('dylurp')
 
         }]);
 angular.module('dylurp')
-    .controller('AnalisaStatistikB', [
-        '$scope',
-        '$http',
-        'AnalisaLatihanModel',
-        'BahagianModel',
-        function($scope, $http, AnalisaLatihanModel, BahagianModel) {
+  .controller('AnalisaStatistikB', [
+    '$scope',
+    '$http',
+    'AnalisaLatihanModel',
+    'BahagianModel',
+    function ($scope, $http, AnalisaLatihanModel, BahagianModel) {
 
-            var setJawapanBahagianB = null;
-            var seriesAll = [];
-            $scope.allData = [];
-            $scope.bahagianB = [];
-            $scope.bahagianBDefault = null;
-            $scope.listOfBahagian = null;
-            $scope.selectedBahagian = null;
-            $scope.chartsOption = [];
-            $scope.listOfAnalisa = [];
+      var setJawapanBahagianB = null;
+      var seriesAll = [];
+      $scope.allData = [];
+      $scope.bahagianB = [];
+      $scope.bahagianBDefault = null;
+      $scope.listOfBahagian = null;
+      $scope.selectedBahagian = null;
+      $scope.chartsOption = [];
+      $scope.listOfAnalisa = [];
 
-            var chartStructure = {
-                options: {
-                    chart: {
-                        type: 'column'
-                    },
-                    plotOptions: {
-                        column: {
-                            pointPadding: 0.2,
-                            borderWidth: 0
-                        }
-                    },
-                    tooltip: {
-                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                        '<td style="padding:0"><b>{point.y} jawapan</b></td></tr>',
-                        footerFormat: '</table>',
-                        shared: true,
-                        useHTML: true
-                    }
-                },
-                title: {
-                    text: 'Hello'
-                },
-                xAxis: {
-                    categories: [],
-                    crosshair: true,
-                    title: {
-                        text: 'Sub bahagian kursus'
-                    }
-                },
-                yAxis: {
-                    allowDecimals: false,
-                    min: 0,
-                    title: {
-                        text: 'Jumlah jawapan'
-                    }
-                },
-                useHighStocks: false,
-                series: [],
-                //function (optional)
-                func: function (chart) {
-                    //setup some logic for the chart
-                }
-            };
-
-            init();
-
-            function init() {
-
-                $http.get('API/v1/latihan/analisa/soalan', {})
-                    .then(function(results) {
-
-                        $scope.bahagianB = angular.copy(results.data.soalanBhgB);
-                        _.each($scope.bahagianB, function(bhg) {
-                            _.each(bhg.kursus, function(k) {
-                                k.totalSangatPerlu = 0;
-                                k.totalPerlu = 0;
-                                k.totalTidakPerlu = 0;
-                            });
-                        });
-
-                        $scope.bahagianBDefault = angular.copy($scope.bahagianB);
-
-                        BahagianModel.query({}, function(responseBahagian) {
-
-                            $scope.listOfBahagian = angular.copy(responseBahagian);
-
-                            AnalisaLatihanModel.query({}, function(responseAnalisa) {
-
-                                $scope.listOfAnalisa = angular.copy(responseAnalisa);
-
-                                $scope.selectedBahagian = '1';
-
-                            }, function(err) {
-                                console.error(err);
-                            });
-
-                        }, function(error) {
-                            console.error(error);
-                        });
-
-                    }, function(error) {
-                        console.error(error);
-                    });
-
+      var chartStructure = {
+        options: {
+          chart: {
+            type: 'column'
+          },
+          xAxis: {
+            categories: []
+          },
+          yAxis: {
+            min: 0,
+            title: {
+              text: 'Jumlah Jawapan'
+            },
+            stackLabels: {
+              enabled: true,
+              style: {
+                fontWeight: 'bold',
+                color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+              }
             }
-
-            $scope.$watch('selectedBahagian', function(b) {
-
-                $scope.chartsOption = [];
-                $scope.bahagianB = angular.copy($scope.bahagianBDefault);
-
-                // Todo : this can be improve, but hey...there is nothing need to be improve
-                _.each($scope.listOfAnalisa, function(analisa) {
-
-                    if(analisa.bahagian_id == b) {
-
-                        _.each(analisa.jawapan_bhg_b, function(jwpB) {
-
-                            _.each($scope.bahagianB, function(charData) {
-
-                                var index = _.findIndex(charData.kursus, {id: jwpB.analisa_kursus_bahagian_b_id});
-
-                                if(index != -1) {
-
-                                    if(jwpB.jawapan == 1) {
-                                        charData.kursus[index].totalSangatPerlu++;
-                                    } else if(jwpB.jawapan == 2) {
-                                        charData.kursus[index].totalPerlu++;
-                                    } else if(jwpB.jawapan == 3) {
-                                        charData.kursus[index].totalTidakPerlu++;
-                                    }
-
-                                }
-
-                            })
-
-                        });
-
-                    }
-
-                });
-
-                _.each($scope.bahagianB, function(answer) {
-
-                    var chart = angular.copy(chartStructure);
-                    chart.title.text = answer.bahagian;
-                    chart.xAxis.categories = _.map(answer.kursus, 'kursus');
-
-                    chart.series = [{
-                        name: 'Sangat Perlu',
-                        data: []
-                    }, {
-                        name: 'Perlu',
-                        data: []
-                    }, {
-                        name: 'Tidak Perlu',
-                        data: []
-                    }];
-
-                    _.each(answer.kursus, function(kursus) {
-                        chart.series[0].data.push(kursus.totalSangatPerlu);
-                        chart.series[1].data.push(kursus.totalPerlu);
-                        chart.series[2].data.push(kursus.totalTidakPerlu);
-                    });
-
-                    $scope.chartsOption.push(chart);
-
-                })
-
-            })
-
+          },
+          tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>',
+            shared: true
+          },
+          plotOptions: {
+            column: {
+              stacking: 'percent',
+              dataLabels: {
+                enabled: true,
+                format: '{point.y}-{point.percentage:.0f}%'
+              }
+            }
+          },
+          title: {
+            text: ''
+          },
+          subtitle: {
+            text: ''
+          }
+        },
+        //Whether to use Highstocks instead of Highcharts (optional). Defaults to false.
+        useHighStocks: false,
+        func: function (chart) {
+          //setup some logic for the chart
         }
-    ]);
-angular.module('dylurp')
-    .controller('AnalisaStatistikk', [
-        '$scope',
-        '$http',
-        'AnalisaLatihanModel',
-        'BahagianModel',
-        function($scope, $http, AnalisaLatihanModel, BahagianModel) {
+      }
 
-            var soalanKompentensi = null;
-            $scope.listOfBahagian = null;
-            $scope.selectedBahagian = null;
-            $scope.chartsOption = [];
-            $scope.listOfAnalisa = [];
+      init();
 
-            var chartStructurePie = {
-                options: {
-                    chart: {
-                        plotBackgroundColor: null,
-                        plotBorderWidth: null,
-                        plotShadow: false,
-                        type: 'pie'
-                    },
-                    tooltip: {
-                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                    },
-                    plotOptions: {
-                        pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            dataLabels: {
-                                enabled: true,
-                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                                style: {
-                                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                                }
-                            }
-                        }
-                    },
-                    title: {
-                        text: ''
-                    },
-                    subtitle: {
-                        text: ''
-                    }
-                },
-                //Whether to use Highstocks instead of Highcharts (optional). Defaults to false.
-                useHighStocks: false,
-                func: function (chart) {
-                    //setup some logic for the chart
+      function init() {
+
+        $http.get('API/v1/latihan/analisa/soalan', {})
+          .then(function (results) {
+
+            $scope.bahagianB = angular.copy(results.data.soalanBhgB);
+            _.each($scope.bahagianB, function (bhg) {
+              _.each(bhg.kursus, function (k) {
+                k.totalSangatPerlu = 0;
+                k.totalPerlu = 0;
+                k.totalTidakPerlu = 0;
+              });
+            });
+
+            $scope.bahagianBDefault = angular.copy($scope.bahagianB);
+
+            BahagianModel.query({}, function (responseBahagian) {
+
+              $scope.listOfBahagian = angular.copy(responseBahagian);
+
+              AnalisaLatihanModel.query({}, function (responseAnalisa) {
+
+                $scope.listOfAnalisa = angular.copy(responseAnalisa);
+
+                $scope.selectedBahagian = '0';
+
+              }, function (err) {
+                console.error(err);
+              });
+
+            }, function (error) {
+              console.error(error);
+            });
+
+          }, function (error) {
+            console.error(error);
+          });
+
+      }
+
+      $scope.$watch('selectedBahagian', function (b) {
+
+        $scope.chartsOption = [];
+        $scope.bahagianB = angular.copy($scope.bahagianBDefault);
+
+        // Todo : this can be improve, but hey...there is nothing need to be improve
+        _.each($scope.listOfAnalisa, function (analisa) {
+
+          if(b == 0) {
+
+            _.each(analisa.jawapan_bhg_b, function (jwpB) {
+
+              _.each($scope.bahagianB, function (charData) {
+
+                var index = _.findIndex(charData.kursus, {id: jwpB.analisa_kursus_bahagian_b_id});
+
+                if (index != -1) {
+
+                  if (jwpB.jawapan == 1) {
+                    charData.kursus[index].totalSangatPerlu++;
+                  } else if (jwpB.jawapan == 2) {
+                    charData.kursus[index].totalPerlu++;
+                  } else if (jwpB.jawapan == 3) {
+                    charData.kursus[index].totalTidakPerlu++;
+                  }
+
                 }
-            }
 
-            init();
-
-            function init() {
-
-                $http.get('API/v1/latihan/analisa/soalan', {})
-                    .then(function(results) {
-
-                        soalanKompentensi = angular.copy(results.data.soalanKompetensi);
-
-                        BahagianModel.query({}, function(responseBahagian) {
-
-                            $scope.listOfBahagian = angular.copy(responseBahagian);
-
-                            AnalisaLatihanModel.query({}, function(responseAnalisa) {
-
-                                $scope.listOfAnalisa = angular.copy(responseAnalisa);
-
-                                $scope.selectedBahagian = '1';
-
-                            }, function(err) {
-                                console.error(err);
-                            });
-
-                        }, function(error) {
-                            console.error(error);
-                        });
-
-                    }, function(error) {
-                        console.error(error);
-                    });
-
-            }
-
-            $scope.$watch('selectedBahagian', function(b) {
-
-                $scope.chartsOption = [];
-                var sectionKompetensi = angular.copy(soalanKompentensi);
-                var totalPersonInside = 0;
-
-                _.each($scope.listOfAnalisa, function(analisa) {
-
-                    if(analisa.bahagian_id == b) {
-
-                        totalPersonInside++;
-
-                        _.each(analisa.jawapan_kompetensi, function(kompentensi) {
-
-                            var indexOfSoalan = _.findIndex(sectionKompetensi, function(sk) {
-                                return sk.id == kompentensi.soalan_kompetensi_id;
-                            });
-
-                            if(typeof sectionKompetensi[indexOfSoalan].totalTKM == 'undefined') {
-                                sectionKompetensi[indexOfSoalan].totalTKM = 0;
-                            }
-                            if(typeof sectionKompetensi[indexOfSoalan].totalTKP == 'undefined') {
-                                sectionKompetensi[indexOfSoalan].totalTKP = 0;
-                            }
-                            if(typeof sectionKompetensi[indexOfSoalan].totalTKKM == 'undefined') {
-                                sectionKompetensi[indexOfSoalan].totalTKKM = 0;
-                            }
-                            if(typeof sectionKompetensi[indexOfSoalan].totalTKKP == 'undefined') {
-                                sectionKompetensi[indexOfSoalan].totalTKKP = 0;
-                            }
-
-                            if(kompentensi.diri_sendiri == 1 && kompentensi.jenis_penilaian == 1) {
-                                sectionKompetensi[indexOfSoalan].totalTKM += kompentensi.jawapan;
-                            } else if(kompentensi.diri_sendiri == 0 && kompentensi.jenis_penilaian == 1) {
-                                sectionKompetensi[indexOfSoalan].totalTKP += kompentensi.jawapan;
-                            } else if(kompentensi.diri_sendiri == 1 && kompentensi.jenis_penilaian == 2) {
-                                sectionKompetensi[indexOfSoalan].totalTKKM += kompentensi.jawapan;
-                            } else if(kompentensi.diri_sendiri == 0 && kompentensi.jenis_penilaian == 2) {
-                                sectionKompetensi[indexOfSoalan].totalTKKP += kompentensi.jawapan;
-                            }
-
-                        })
-
-                    }
-
-                });
-
-                var totalAll = totalPersonInside * 20;
-
-                _.each(sectionKompetensi, function(sk) {
-
-                    var chart = angular.copy(chartStructurePie);
-
-                    chart.options.title.text = sk.soalan;
-                    chart.options.subtitle.text = sk.penerangan;
-
-                    chart.series = [{
-                        name: 'Tahap',
-                        colorByPoint: true,
-                        data: [{
-                            name: 'Tahap Kebolehan Diri Sendiri',
-                            y: sk.totalTKM
-                        }, {
-                            name: 'Tahap Kebolehan Penyelia',
-                            y: sk.totalTKP
-                        }, {
-                            name: 'Tahap Keperluan Kerja Diri Sendiri',
-                            y: sk.totalTKKM
-                        }, {
-                            name: 'Tahap Keperluan Kerja Penyelia',
-                            y: sk.totalTKKP
-                        }]
-                    }];
-
-                    $scope.chartsOption.push(chart)
-
-                });
-
-
+              });
 
             });
 
-        }
-    ]);
+          } else if (analisa.bahagian_id == b) {
+
+            _.each(analisa.jawapan_bhg_b, function (jwpB) {
+
+              _.each($scope.bahagianB, function (charData) {
+
+                var index = _.findIndex(charData.kursus, {id: jwpB.analisa_kursus_bahagian_b_id});
+
+                if (index != -1) {
+
+                  if (jwpB.jawapan == 1) {
+                    charData.kursus[index].totalSangatPerlu++;
+                  } else if (jwpB.jawapan == 2) {
+                    charData.kursus[index].totalPerlu++;
+                  } else if (jwpB.jawapan == 3) {
+                    charData.kursus[index].totalTidakPerlu++;
+                  }
+
+                }
+
+              })
+
+            });
+
+          }
+
+        });
+
+        _.each($scope.bahagianB, function (answer) {
+
+          var chart = angular.copy(chartStructure);
+          chart.options.title.text = answer.bahagian;
+          chart.options.xAxis.categories = _.map(answer.kursus, 'kursus');
+
+          chart.series = [{
+            name: 'Sangat Perlu',
+            data: []
+          }, {
+            name: 'Perlu',
+            data: []
+          }, {
+            name: 'Tidak Perlu',
+            data: []
+          }];
+
+          _.each(answer.kursus, function (kursus) {
+            chart.series[0].data.push(kursus.totalSangatPerlu);
+            chart.series[1].data.push(kursus.totalPerlu);
+            chart.series[2].data.push(kursus.totalTidakPerlu);
+          });
+
+          $scope.chartsOption.push(chart);
+
+        })
+
+      })
+
+    }
+  ]);
 angular.module('dylurp')
-    .controller('AnalisaStatistik', [
-        '$scope',
-        '$http',
-        'AnalisaLatihanModel',
-        'BahagianModel',
-        function($scope, $http, AnalisaLatihanModel, BahagianModel) {
+  .controller('AnalisaStatistik', [
+    '$scope',
+    '$http',
+    'AnalisaLatihanModel',
+    'BahagianModel',
+    function ($scope, $http, AnalisaLatihanModel, BahagianModel) {
 
-            var seriesAll = [];
-            $scope.allData = [];
+      var seriesAll = [];
+      $scope.allData = [];
 
-            init();
+      init();
 
-            function init() {
+      function init() {
 
-                $http.get('API/v1/latihan/analisa/soalan', {})
-                    .then(function(results) {
+        $http.get('API/v1/latihan/analisa/soalan', {})
+          .then(function (results) {
 
-                        var setJawapanBahagianASoalan2 = _.find(results.data.soalanBhgA, {id: 2}).set_jawapan;
-                        _.each(setJawapanBahagianASoalan2, function(o) {
-                            o.total = 0;
+            var setJawapanBahagianASoalan2 = _.find(results.data.soalanBhgA, {id: 2}).set_jawapan;
+            _.each(setJawapanBahagianASoalan2, function (o) {
+              o.total = 0;
+            });
+
+            BahagianModel.query({}, function (responseBahagian) {
+
+              seriesAll = responseBahagian;
+
+              // Init results object
+              _.each(seriesAll, function (rb) {
+                rb.bahagianA = {
+                  soalan1: {ya: 0, tidak: 0},
+                  soalan2: angular.copy(setJawapanBahagianASoalan2),
+                  soalan3: {ya: 0, tidak: 0},
+                  soalan4: {less: 0, more: 0},
+                }
+              });
+
+              AnalisaLatihanModel.query({}, function (responseAnalisa) {
+
+                _.each(responseAnalisa, function (analisa) {
+
+                  var RBIndex = _.findIndex(seriesAll, function (o) {
+                    return o.id == analisa.bahagian_id
+                  });
+
+                  _.each(analisa.jawapan_bhg_a, function (ja) {
+
+                    if (ja.soalan_analisa_bhg_a_id == 1) {
+                      if (ja.jawapan == 1) {
+                        seriesAll[RBIndex].bahagianA.soalan1.ya++;
+                      } else {
+                        seriesAll[RBIndex].bahagianA.soalan1.tidak++;
+                      }
+                    } else if (ja.soalan_analisa_bhg_a_id == 3) {
+                      if (ja.jawapan == 1) {
+                        seriesAll[RBIndex].bahagianA.soalan3.ya++;
+                      } else {
+                        seriesAll[RBIndex].bahagianA.soalan3.tidak++;
+                      }
+                    } else if (ja.soalan_analisa_bhg_a_id == 4) {
+                      if (ja.jawapan == 1) {
+                        seriesAll[RBIndex].bahagianA.soalan4.less++;
+                      } else {
+                        seriesAll[RBIndex].bahagianA.soalan4.more++;
+                      }
+                    } else if (ja.soalan_analisa_bhg_a_id == null) {
+
+                      if (ja.jawapan == 1) {
+                        var S2Index = _.findIndex(seriesAll[RBIndex].bahagianA.soalan2, function (o) {
+                          return o.id == ja.set_jawapan_soalan_analisa_bhg_a_id
                         });
+                        seriesAll[RBIndex].bahagianA.soalan2[S2Index].total++;
+                      }
+                    }
+                  });
 
-                        BahagianModel.query({}, function(responseBahagian) {
+                });
 
-                            seriesAll = responseBahagian;
+                question1Generate();
 
-                            // Init results object
-                            _.each(seriesAll, function(rb) {
-                                rb.bahagianA = {
-                                    soalan1: {ya: 0, tidak: 0},
-                                    soalan2: angular.copy(setJawapanBahagianASoalan2),
-                                    soalan3: {ya: 0, tidak: 0},
-                                    soalan4: {less: 0, more: 0},
-                                }
-                            });
+              }, function (err) {
+                console.error(err);
+              });
 
-                            AnalisaLatihanModel.query({}, function(responseAnalisa) {
+            }, function (error) {
+              console.error(error);
+            });
 
-                                _.each(responseAnalisa, function(analisa) {
+          }, function (error) {
+            console.error(error);
+          });
 
-                                    var RBIndex = _.findIndex(seriesAll, function(o) {
-                                        return o.id == analisa.bahagian_id
-                                    });
+      }
 
-                                    _.each(analisa.jawapan_bhg_a, function(ja) {
+      function question1Generate() {
+        var series = [];
+        var label = [];
+        var categories = _.map(seriesAll, 'nama');
 
-                                        if(ja.soalan_analisa_bhg_a_id == 1) {
-                                            if(ja.jawapan == 1) {
-                                                seriesAll[RBIndex].bahagianA.soalan1.ya++;
-                                            } else {
-                                                seriesAll[RBIndex].bahagianA.soalan1.tidak++;
-                                            }
-                                        } else if(ja.soalan_analisa_bhg_a_id == 3) {
-                                            if(ja.jawapan == 1) {
-                                                seriesAll[RBIndex].bahagianA.soalan3.ya++;
-                                            } else {
-                                                seriesAll[RBIndex].bahagianA.soalan3.tidak++;
-                                            }
-                                        } else if(ja.soalan_analisa_bhg_a_id == 4) {
-                                            if(ja.jawapan == 1) {
-                                                seriesAll[RBIndex].bahagianA.soalan4.less++;
-                                            } else {
-                                                seriesAll[RBIndex].bahagianA.soalan4.more++;
-                                            }
-                                        } else if(ja.soalan_analisa_bhg_a_id == null) {
-
-                                            if(ja.jawapan == 1) {
-                                                var S2Index = _.findIndex(seriesAll[RBIndex].bahagianA.soalan2, function(o) {
-                                                    return o.id == ja.set_jawapan_soalan_analisa_bhg_a_id
-                                                });
-                                                seriesAll[RBIndex].bahagianA.soalan2[S2Index].total++;
-                                            }
-                                        }
-                                    });
-
-                                });
-
-                                question1Generate();
-
-                            }, function(err) {
-                                console.error(err);
-                            });
-
-                        }, function(error) {
-                            console.error(error);
-                        });
-
-                    }, function(error) {
-                        console.error(error);
-                    });
-
+        label.push({
+          title: 'Soalan 1',
+          sub: 'Pada pendapat anda, adakah organisasi anda menyediakan peluang untuk meningkatkan pengetahuan dan kemahiran anda dalam bidang utama kerja?'
+        });
+        series.push({
+          data: [{
+            type: 'column',
+            name: 'Ya',
+            data: []
+          }, {
+            type: 'column',
+            name: 'Tidak',
+            data: []
+          }, {
+            type: 'pie',
+            name: 'Pecahan keseluruhan bahagian',
+            data: [{
+              name: 'Ya',
+              y: 0,
+              color: Highcharts.getOptions().colors[0]
+            }, {
+              name: 'Tidak',
+              y: 0,
+              color: Highcharts.getOptions().colors[1]
+            }],
+            center: [30, 25],
+            size: 100,
+            showInLegend: false,
+            dataLabels: {
+              enabled: false
+            },
+            tooltip: {
+              pointFormat: ' - <b>{point.percentage:.1f}%</b>'
             }
+          }]
+        });
 
-            function question1Generate() {
-                var series = [];
-                var label = [];
-                var categories = _.map(seriesAll, 'nama');
-
-                label.push({
-                    title: 'Soalan 1',
-                    sub: 'Pada pendapat anda, adakah organisasi anda menyediakan peluang untuk meningkatkan pengetahuan dan kemahiran anda dalam bidang utama kerja?'
-                });
-                series.push({
-                    data: [{
-                        name: 'Ya',
-                        data: []
-                    }, {
-                        name: 'Tidak',
-                        data: []
-                    }]
-                });
-
-                label.push({
-                    title: 'Soalan 2',
-                    sub: 'Pada pendapat anda, apakah metodologi/kaedah latihan yang lebih berkesan untuk meningkatkan kualiti kerja anda?'
-                });
-                series.push({
-                    data: [{
-                        name: 'Seminar',
-                        data: []
-                    }, {
-                        name: 'Ceramah',
-                        data: []
-                    }, {
-                        name: 'Bengkel',
-                        data: []
-                    }, {
-                        name: 'Amali/Latih Amal',
-                        data: []
-                    }]
-                });
-
-                label.push({
-                    title: 'Soalan 3',
-                    sub: 'Bolehkah kursus/latihan yang disediakan dan dihadiri membantu meningkatkan kecekapan kerja/tugasan anda?'
-                });
-                series.push({
-                    data: [{
-                        name: 'Ya',
-                        data: []
-                    }, {
-                        name: 'Tidak',
-                        data: []
-                    }]
-                });
-
-                label.push({
-                    title: 'Soalan 4',
-                    sub: 'Secara amnya, berapa lamakah anda sanggup menghadiri sesuatu kursus/latihan?'
-                });
-                series.push({
-                    data: [{
-                        name: 'Kurang 3 hari',
-                        data: []
-                    }, {
-                        name: 'Lebih 3 hari',
-                        data: []
-                    }]
-                });
-
-                _.each(seriesAll, function(ad) {
-
-                    series[0].data[0].data.push(ad.bahagianA.soalan1.ya);
-                    series[0].data[1].data.push(ad.bahagianA.soalan1.tidak);
-
-                    series[1].data[0].data.push(ad.bahagianA.soalan2[0].total);
-                    series[1].data[1].data.push(ad.bahagianA.soalan2[1].total);
-                    series[1].data[2].data.push(ad.bahagianA.soalan2[2].total);
-                    series[1].data[3].data.push(ad.bahagianA.soalan2[3].total);
-
-                    series[2].data[0].data.push(ad.bahagianA.soalan3.ya);
-                    series[2].data[1].data.push(ad.bahagianA.soalan3.tidak);
-
-                    series[3].data[0].data.push(ad.bahagianA.soalan4.less);
-                    series[3].data[1].data.push(ad.bahagianA.soalan4.more);
-
-                });
-
-                generateChart('#chart11', label[0], categories, series[0].data);
-                generateChart('#chart12', label[1], categories, series[1].data);
-                generateChart('#chart13', label[2], categories, series[2].data);
-                generateChart('#chart14', label[3], categories, series[3].data);
-
-                // generateChart('#chart11', {
-                //     title: 'Soalan 1',
-                //     sub: 'Pada pendapat anda, adakah organisasi anda menyediakan peluang untuk meningkatkan pengetahuan dan kemahiran anda dalam bidang utama kerja?'
-                // }, {
-                //     name: 'Jawapan',
-                //     colorByPoint: true,
-                //     data: [{
-                //         name: 'Ya',
-                //         y: 56.33
-                //     }, {
-                //         name: 'Tidak',
-                //         y: 24.03
-                //     }]
-                // });
-
+        label.push({
+          title: 'Soalan 2',
+          sub: 'Pada pendapat anda, apakah metodologi/kaedah latihan yang lebih berkesan untuk meningkatkan kualiti kerja anda?'
+        });
+        series.push({
+          data: [{
+            type: 'column',
+            name: 'Seminar',
+            data: []
+          }, {
+            type: 'column',
+            name: 'Ceramah',
+            data: []
+          }, {
+            type: 'column',
+            name: 'Bengkel',
+            data: []
+          }, {
+            type: 'column',
+            name: 'Amali/Latih Amal',
+            data: []
+          }, {
+            type: 'pie',
+            name: 'Pecahan keseluruhan bahagian',
+            data: [{
+              name: 'Seminar',
+              y: 0,
+              color: Highcharts.getOptions().colors[0]
+            }, {
+              name: 'Ceramah',
+              y: 0,
+              color: Highcharts.getOptions().colors[1]
+            }, {
+              name: 'Bengkel',
+              y: 0,
+              color: Highcharts.getOptions().colors[2]
+            }, {
+              name: 'Amali/Latih Amal',
+              y: 0,
+              color: Highcharts.getOptions().colors[3]
+            }],
+            center: [30, 25],
+            size: 100,
+            showInLegend: false,
+            dataLabels: {
+              enabled: false
+            },
+            tooltip: {
+              pointFormat: ' - <b>{point.percentage:.1f}%</b>'
             }
+          }]
+        });
 
-            function generateChart(element, question, categories, series) {
-
-                $(element).highcharts({
-                    chart: {
-                        type: 'column'
-                    },
-                    title: {
-                        text: question.title
-                    },
-                    subtitle: {
-                        text: question.sub
-                    },
-                    xAxis: {
-                        categories: categories,
-                        crosshair: true
-                    },
-                    yAxis: {
-                        allowDecimals: false,
-                        min: 0,
-                        title: {
-                            text: 'Jumlah jawapan'
-                        }
-                    },
-                    credits: {
-                        enabled: false
-                    },
-                    tooltip: {
-                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                        '<td style="padding:0"><b>{point.y} jawapan</b></td></tr>',
-                        footerFormat: '</table>',
-                        shared: true,
-                        useHTML: true
-                    },
-                    plotOptions: {
-                        column: {
-                            pointPadding: 0.2,
-                            borderWidth: 0
-                        }
-                    },
-                    series: series
-                });
-
+        label.push({
+          title: 'Soalan 3',
+          sub: 'Bolehkah kursus/latihan yang disediakan dan dihadiri membantu meningkatkan kecekapan kerja/tugasan anda?'
+        });
+        series.push({
+          data: [{
+            type: 'column',
+            name: 'Ya',
+            data: []
+          }, {
+            type: 'column',
+            name: 'Tidak',
+            data: []
+          }, {
+            type: 'pie',
+            name: 'Pecahan keseluruhan bahagian',
+            data: [{
+              name: 'Ya',
+              y: 0,
+              color: Highcharts.getOptions().colors[0]
+            }, {
+              name: 'Tidak',
+              y: 0,
+              color: Highcharts.getOptions().colors[1]
+            }],
+            center: [30, 25],
+            size: 100,
+            showInLegend: false,
+            dataLabels: {
+              enabled: false
+            },
+            tooltip: {
+              pointFormat: ' - <b>{point.percentage:.1f}%</b>'
             }
+          }]
+        });
 
-        }]);
+        label.push({
+          title: 'Soalan 4',
+          sub: 'Secara amnya, berapa lamakah anda sanggup menghadiri sesuatu kursus/latihan?'
+        });
+        series.push({
+          data: [{
+            type: 'column',
+            name: 'Kurang 3 hari',
+            data: []
+          }, {
+            type: 'column',
+            name: 'Lebih 3 hari',
+            data: []
+          }, {
+            type: 'pie',
+            name: 'Pecahan keseluruhan bahagian',
+            data: [{
+              name: 'Kurang 3 hari',
+              y: 0,
+              color: Highcharts.getOptions().colors[0]
+            }, {
+              name: 'Lebih 3 hari',
+              y: 0,
+              color: Highcharts.getOptions().colors[1]
+            }],
+            center: [30, 25],
+            size: 100,
+            showInLegend: false,
+            dataLabels: {
+              enabled: false
+            },
+            tooltip: {
+              pointFormat: ' - <b>{point.percentage:.1f}%</b>'
+            }
+          }]
+        });
+
+        _.each(seriesAll, function (ad) {
+
+          series[0].data[0].data.push(ad.bahagianA.soalan1.ya);
+          series[0].data[1].data.push(ad.bahagianA.soalan1.tidak);
+          series[0].data[2].data[0].y += ad.bahagianA.soalan1.ya;
+          series[0].data[2].data[1].y += ad.bahagianA.soalan1.tidak;
+
+          series[1].data[0].data.push(ad.bahagianA.soalan2[0].total);
+          series[1].data[1].data.push(ad.bahagianA.soalan2[1].total);
+          series[1].data[2].data.push(ad.bahagianA.soalan2[2].total);
+          series[1].data[3].data.push(ad.bahagianA.soalan2[3].total);
+          series[1].data[4].data[0].y += ad.bahagianA.soalan2[0].total;
+          series[1].data[4].data[1].y += ad.bahagianA.soalan2[1].total;
+          series[1].data[4].data[2].y += ad.bahagianA.soalan2[2].total;
+          series[1].data[4].data[3].y += ad.bahagianA.soalan2[3].total;
+
+          series[2].data[0].data.push(ad.bahagianA.soalan3.ya);
+          series[2].data[1].data.push(ad.bahagianA.soalan3.tidak);
+          series[2].data[2].data[0].y += ad.bahagianA.soalan3.ya;
+          series[2].data[2].data[1].y += ad.bahagianA.soalan3.tidak;
+
+          series[3].data[0].data.push(ad.bahagianA.soalan4.less);
+          series[3].data[1].data.push(ad.bahagianA.soalan4.more);
+          series[3].data[2].data[0].y += ad.bahagianA.soalan4.less;
+          series[3].data[2].data[1].y += ad.bahagianA.soalan4.more;
+
+        });
+
+        generateChart('#chart11', label[0], categories, series[0].data);
+        generateChart('#chart12', label[1], categories, series[1].data);
+        generateChart('#chart13', label[2], categories, series[2].data);
+        generateChart('#chart14', label[3], categories, series[3].data);
+
+      }
+
+      function generateChart(element, question, categories, series) {
+
+        $(element).highcharts({
+          title: {
+            text: question.title
+          },
+          subtitle: {
+            text: question.sub
+          },
+          xAxis: {
+            categories: categories,
+            crosshair: true
+          },
+          yAxis: {
+            allowDecimals: false,
+            min: 0,
+            max: 13,
+            title: {
+              text: 'Jumlah jawapan'
+            }
+          },
+          credits: {
+            enabled: false
+          },
+          tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y} jawapan</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+          },
+          plotOptions: {
+            column: {
+              pointPadding: 0.2,
+              borderWidth: 0
+            }
+          },
+          series: series
+        });
+
+      }
+
+    }]);
+angular.module('dylurp')
+  .controller('AnalisaStatistikk', [
+    '$scope',
+    '$http',
+    'AnalisaLatihanModel',
+    'BahagianModel',
+    function ($scope, $http, AnalisaLatihanModel, BahagianModel) {
+
+      var soalanKompentensi = null;
+      $scope.listOfBahagian = null;
+      $scope.selectedBahagian = null;
+      $scope.chartsOption = [];
+      $scope.listOfAnalisa = [];
+
+      var chartStructurePie = {
+        options: {
+          chart: {
+            type: 'column'
+          },
+          xAxis: {
+            categories: ['KBA', 'KBP', 'KPKA', 'KPKP']
+          },
+          yAxis: {
+            min: 0,
+            title: {
+              text: 'Peratusan'
+            },
+            stackLabels: {
+              enabled: true,
+              style: {
+                fontWeight: 'bold',
+                color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+              }
+            }
+          },
+          tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>',
+            shared: true
+          },
+          plotOptions: {
+            column: {
+              stacking: 'percent',
+              dataLabels: {
+                enabled: true,
+                format: '{point.y}-{point.percentage:.0f}%'
+              }
+            }
+          },
+          title: {
+            text: ''
+          },
+          subtitle: {
+            text: ''
+          }
+        },
+        //Whether to use Highstocks instead of Highcharts (optional). Defaults to false.
+        useHighStocks: false,
+        func: function (chart) {
+          //setup some logic for the chart
+        }
+      }
+
+      init();
+
+      function init() {
+
+        $http.get('API/v1/latihan/analisa/soalan', {})
+          .then(function (results) {
+
+            soalanKompentensi = angular.copy(results.data.soalanKompetensi);
+
+            BahagianModel.query({}, function (responseBahagian) {
+
+              $scope.listOfBahagian = angular.copy(responseBahagian);
+
+              AnalisaLatihanModel.query({}, function (responseAnalisa) {
+
+                $scope.listOfAnalisa = angular.copy(responseAnalisa);
+
+                $scope.selectedBahagian = '0';
+
+              }, function (err) {
+                console.error(err);
+              });
+
+            }, function (error) {
+              console.error(error);
+            });
+
+          }, function (error) {
+            console.error(error);
+          });
+
+      }
+
+      $scope.$watch('selectedBahagian', function (b) {
+
+        $scope.chartsOption = [];
+        var sectionKompetensi = angular.copy(soalanKompentensi);
+        var totalPersonInside = 0;
+        var insideObject = {
+          satu: 0,
+          dua: 0,
+          tiga: 0,
+          empat: 0,
+          lima: 0
+        }
+
+        _.each($scope.listOfAnalisa, function (analisa) {
+
+          if(b == 0) {
+
+            _.each(analisa.jawapan_kompetensi, function(kompentensi) {
+
+              var indexOfSoalan = _.findIndex(sectionKompetensi, function (sk) {
+                return sk.id == kompentensi.soalan_kompetensi_id;
+              });
+
+              if (typeof sectionKompetensi[indexOfSoalan].TKM == 'undefined') {
+                sectionKompetensi[indexOfSoalan].TKM = angular.copy(insideObject);
+              }
+              if (typeof sectionKompetensi[indexOfSoalan].TKP == 'undefined') {
+                sectionKompetensi[indexOfSoalan].TKP = angular.copy(insideObject);
+              }
+              if (typeof sectionKompetensi[indexOfSoalan].TKKM == 'undefined') {
+                sectionKompetensi[indexOfSoalan].TKKM = angular.copy(insideObject);
+              }
+              if (typeof sectionKompetensi[indexOfSoalan].TKKP == 'undefined') {
+                sectionKompetensi[indexOfSoalan].TKKP = angular.copy(insideObject);
+              }
+
+              if (kompentensi.diri_sendiri == 1 && kompentensi.jenis_penilaian == 1) {
+
+                if(kompentensi.jawapan == 1) {
+                  sectionKompetensi[indexOfSoalan].TKM.satu++;
+                } else if(kompentensi.jawapan == 2) {
+                  sectionKompetensi[indexOfSoalan].TKM.dua++;
+                } else if(kompentensi.jawapan == 3) {
+                  sectionKompetensi[indexOfSoalan].TKM.tiga++;
+                } else if(kompentensi.jawapan == 4) {
+                  sectionKompetensi[indexOfSoalan].TKM.empat++;
+                } else if(kompentensi.jawapan == 5) {
+                  sectionKompetensi[indexOfSoalan].TKM.lima++;
+                }
+
+              } else if (kompentensi.diri_sendiri == 0 && kompentensi.jenis_penilaian == 1) {
+
+                if(kompentensi.jawapan == 1) {
+                  sectionKompetensi[indexOfSoalan].TKP.satu++;
+                } else if(kompentensi.jawapan == 2) {
+                  sectionKompetensi[indexOfSoalan].TKP.dua++;
+                } else if(kompentensi.jawapan == 3) {
+                  sectionKompetensi[indexOfSoalan].TKP.tiga++;
+                } else if(kompentensi.jawapan == 4) {
+                  sectionKompetensi[indexOfSoalan].TKP.empat++;
+                } else if(kompentensi.jawapan == 5) {
+                  sectionKompetensi[indexOfSoalan].TKP.lima++;
+                }
+
+              } else if (kompentensi.diri_sendiri == 1 && kompentensi.jenis_penilaian == 2) {
+
+                if(kompentensi.jawapan == 1) {
+                  sectionKompetensi[indexOfSoalan].TKKM.satu++;
+                } else if(kompentensi.jawapan == 2) {
+                  sectionKompetensi[indexOfSoalan].TKKM.dua++;
+                } else if(kompentensi.jawapan == 3) {
+                  sectionKompetensi[indexOfSoalan].TKKM.tiga++;
+                } else if(kompentensi.jawapan == 4) {
+                  sectionKompetensi[indexOfSoalan].TKKM.empat++;
+                } else if(kompentensi.jawapan == 5) {
+                  sectionKompetensi[indexOfSoalan].TKKM.lima++;
+                }
+
+              } else if (kompentensi.diri_sendiri == 0 && kompentensi.jenis_penilaian == 2) {
+
+                if(kompentensi.jawapan == 1) {
+                  sectionKompetensi[indexOfSoalan].TKKP.satu++;
+                } else if(kompentensi.jawapan == 2) {
+                  sectionKompetensi[indexOfSoalan].TKKP.dua++;
+                } else if(kompentensi.jawapan == 3) {
+                  sectionKompetensi[indexOfSoalan].TKKP.tiga++;
+                } else if(kompentensi.jawapan == 4) {
+                  sectionKompetensi[indexOfSoalan].TKKP.empat++;
+                } else if(kompentensi.jawapan == 5) {
+                  sectionKompetensi[indexOfSoalan].TKKP.lima++;
+                }
+
+              }
+
+            })
+
+            // console.log('Jawapan Kompetensi ', analisa.jawapan_kompetensi);
+
+          } else if (analisa.bahagian_id == b) {
+
+            _.each(analisa.jawapan_kompetensi, function(kompentensi) {
+
+              var indexOfSoalan = _.findIndex(sectionKompetensi, function (sk) {
+                return sk.id == kompentensi.soalan_kompetensi_id;
+              });
+
+              if (typeof sectionKompetensi[indexOfSoalan].TKM == 'undefined') {
+                sectionKompetensi[indexOfSoalan].TKM = angular.copy(insideObject);
+              }
+              if (typeof sectionKompetensi[indexOfSoalan].TKP == 'undefined') {
+                sectionKompetensi[indexOfSoalan].TKP = angular.copy(insideObject);
+              }
+              if (typeof sectionKompetensi[indexOfSoalan].TKKM == 'undefined') {
+                sectionKompetensi[indexOfSoalan].TKKM = angular.copy(insideObject);
+              }
+              if (typeof sectionKompetensi[indexOfSoalan].TKKP == 'undefined') {
+                sectionKompetensi[indexOfSoalan].TKKP = angular.copy(insideObject);
+              }
+
+              if (kompentensi.diri_sendiri == 1 && kompentensi.jenis_penilaian == 1) {
+
+                if(kompentensi.jawapan == 1) {
+                  sectionKompetensi[indexOfSoalan].TKM.satu++;
+                } else if(kompentensi.jawapan == 2) {
+                  sectionKompetensi[indexOfSoalan].TKM.dua++;
+                } else if(kompentensi.jawapan == 3) {
+                  sectionKompetensi[indexOfSoalan].TKM.tiga++;
+                } else if(kompentensi.jawapan == 4) {
+                  sectionKompetensi[indexOfSoalan].TKM.empat++;
+                } else if(kompentensi.jawapan == 5) {
+                  sectionKompetensi[indexOfSoalan].TKM.lima++;
+                }
+
+              } else if (kompentensi.diri_sendiri == 0 && kompentensi.jenis_penilaian == 1) {
+
+                if(kompentensi.jawapan == 1) {
+                  sectionKompetensi[indexOfSoalan].TKP.satu++;
+                } else if(kompentensi.jawapan == 2) {
+                  sectionKompetensi[indexOfSoalan].TKP.dua++;
+                } else if(kompentensi.jawapan == 3) {
+                  sectionKompetensi[indexOfSoalan].TKP.tiga++;
+                } else if(kompentensi.jawapan == 4) {
+                  sectionKompetensi[indexOfSoalan].TKP.empat++;
+                } else if(kompentensi.jawapan == 5) {
+                  sectionKompetensi[indexOfSoalan].TKP.lima++;
+                }
+
+              } else if (kompentensi.diri_sendiri == 1 && kompentensi.jenis_penilaian == 2) {
+
+                if(kompentensi.jawapan == 1) {
+                  sectionKompetensi[indexOfSoalan].TKKM.satu++;
+                } else if(kompentensi.jawapan == 2) {
+                  sectionKompetensi[indexOfSoalan].TKKM.dua++;
+                } else if(kompentensi.jawapan == 3) {
+                  sectionKompetensi[indexOfSoalan].TKKM.tiga++;
+                } else if(kompentensi.jawapan == 4) {
+                  sectionKompetensi[indexOfSoalan].TKKM.empat++;
+                } else if(kompentensi.jawapan == 5) {
+                  sectionKompetensi[indexOfSoalan].TKKM.lima++;
+                }
+
+              } else if (kompentensi.diri_sendiri == 0 && kompentensi.jenis_penilaian == 2) {
+
+                if(kompentensi.jawapan == 1) {
+                  sectionKompetensi[indexOfSoalan].TKKP.satu++;
+                } else if(kompentensi.jawapan == 2) {
+                  sectionKompetensi[indexOfSoalan].TKKP.dua++;
+                } else if(kompentensi.jawapan == 3) {
+                  sectionKompetensi[indexOfSoalan].TKKP.tiga++;
+                } else if(kompentensi.jawapan == 4) {
+                  sectionKompetensi[indexOfSoalan].TKKP.empat++;
+                } else if(kompentensi.jawapan == 5) {
+                  sectionKompetensi[indexOfSoalan].TKKP.lima++;
+                }
+
+              }
+
+            })
+
+          }
+
+        });
+
+        var totalAll = totalPersonInside * 20;
+
+        _.each(sectionKompetensi, function (sk) {
+
+          console.log(sectionKompetensi);
+
+          var chart = angular.copy(chartStructurePie);
+
+          chart.options.title.text = sk.soalan;
+          chart.options.subtitle.text = sk.penerangan;
+
+          chart.series = [{
+            name: '1',
+            data: [sk.TKM.satu, sk.TKP.satu, sk.TKKM.satu, sk.TKKP.satu]
+          }, {
+            name: '2',
+            data: [sk.TKM.dua, sk.TKP.dua, sk.TKKM.dua, sk.TKKP.dua]
+          }, {
+            name: '3',
+            data: [sk.TKM.tiga, sk.TKP.tiga, sk.TKKM.tiga, sk.TKKP.tiga]
+          }, {
+            name: '4',
+            data: [sk.TKM.empat, sk.TKP.empat, sk.TKKM.empat, sk.TKKP.empat]
+          }, {
+            name: '5',
+            data: [sk.TKM.lima, sk.TKP.lima, sk.TKKM.lima, sk.TKKP.lima]
+          }]
+
+          $scope.chartsOption.push(chart)
+
+        });
+
+
+      });
+
+    }
+  ]);
 angular.module('dylurp')
     .controller('DaftarJawapanPenilaian', [
         '$scope',
