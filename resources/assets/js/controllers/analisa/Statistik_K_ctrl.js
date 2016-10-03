@@ -106,8 +106,6 @@ angular.module('dylurp')
           lima: 0
         }
 
-        console.log('Section ', sectionKompetensi);
-
         _.each($scope.listOfAnalisa, function (analisa) {
 
           if(b == 0) {
